@@ -1,45 +1,14 @@
-"use client";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { useState } from "react";
-import { auth } from "../lib/firebase";
+import Link from "next/link";
+import Login from "./login";
 
 export default function Home() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const register = (email: string, password: string) => {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log(user);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-      });
-  };
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="text-3xl">hello world</div>
-      <div className="border border-black">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            register(email, password);
-          }}
-        >
-          <input
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="text"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button type="submit">register</button>
-        </form>
+    <main className="flex min-h-screen flex-col items-center justify-center">
+      <div className="bg-gray-300 px-10 py-5 rounded-lg space-y-5">
+        <Login />
+        <Link href="/signup" className="block mt-2 text-neutral-900 font-serif">
+          Register
+        </Link>
       </div>
     </main>
   );
