@@ -1,27 +1,44 @@
 "use client";
 import { auth } from "@/lib/firebase";
+import { decrypt, encrypt } from "@/lib/jwt";
 import { handleError } from "@/lib/utils";
-// import { auth } from "@/lib/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+// import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
   const [error, setError] = useState("");
+
   const handleLogin = async (e: any) => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      const session = await encrypt({ email, password });
+      localStorage.setItem("wtr-local", session);
       router.push("/home");
-    } catch (e) {
-      handleError(e, setError);
+    } catch (err) {
+      handleError(err, setError);
     }
   };
+
+  const autoLogIn = async (userInfo: string) => {
+    const { email, password } = await decrypt(userInfo);
+    await signInWithEmailAndPassword(auth, email, password);
+    router.push("/home");
+  };
+  useEffect(() => {
+    const userInfo = localStorage.getItem("wtr-local");
+    if (!userInfo) return;
+    autoLogIn(userInfo);
+  }, []);
+
   return (
     <form className="flex flex-col gap-5">
+      {error.length > 1 && <div>{error}</div>}
       <div className="flex flex-col">
         <label htmlFor="email">Email:</label>
         <input

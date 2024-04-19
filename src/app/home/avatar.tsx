@@ -1,24 +1,23 @@
-import { auth, db } from "@/lib/firebase";
+import { db } from "@/lib/firebase";
+import { User as FirebaseUser } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
 
-const Avatar = () => {
-  const [user] = useAuthState(auth);
-
-  const userRef = doc(db, "users", user?.uid!);
+const Avatar = ({ user }: { user: FirebaseUser }) => {
   const [avatar, setAvatar] = useState("");
   const getAvatar = async () => {
-    const docSnap = await getDoc(userRef);
-    if (docSnap.exists()) {
-      return docSnap.data().avatar;
+    if (user) {
+      const userRef = doc(db, user.uid, "data");
+      const docSnap = await getDoc(userRef);
+
+      return docSnap.exists() ? docSnap.data()?.avatar : "anonymous";
     } else {
-      return "dog";
+      return "anonymous";
     }
   };
+
   useEffect(() => {
-    if (avatar.length > 1) return;
     getAvatar().then((res) => {
       setAvatar(res);
     });

@@ -1,5 +1,6 @@
 "use client";
 import { auth, db } from "@/lib/firebase";
+import { encrypt } from "@/lib/jwt";
 import { handleError, validate_inputs } from "@/lib/utils";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, doc, setDoc } from "firebase/firestore";
@@ -30,11 +31,13 @@ const SignUpPage = () => {
         email,
         password
       );
-      const users = collection(db, "users");
-      const userRef = doc(users, credential.user.uid);
+      const users = collection(db, credential.user.uid);
+      const userRef = doc(users, "data");
       await setDoc(userRef, {
         avatar: avatar,
       });
+      const session = await encrypt({ email, password });
+      localStorage.setItem("wtr-local", session);
       router.push("/home");
     } catch (e) {
       handleError(e, setError);
