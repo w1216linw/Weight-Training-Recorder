@@ -1,69 +1,21 @@
 "use client";
 
 import { auth, db } from "@/lib/firebase";
-import { User as FirebaseUser } from "firebase/auth";
+import { classes } from "@/lib/utils";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { FaLessThan, FaPlus } from "react-icons/fa";
-
-const Exercise = ({ user, date }: { user: FirebaseUser; date: string }) => {
-  const [exercise, setExercise] = useState({ name: "", weight: "", sets: "" });
-  const update = async () => {
-    const userRef = doc(db, user.uid + "dates", date);
-    await setDoc(userRef, {
-      [exercise.name]: {
-        weight: exercise.weight,
-        sets: exercise.sets,
-      },
-    });
-  };
-  return (
-    <div className="flex gap-2">
-      <div>
-        <div className="mb-2">
-          <input
-            type="text"
-            placeholder="Name"
-            value={exercise.name}
-            onChange={(e) => setExercise({ ...exercise, name: e.target.value })}
-            className="px-4 py-2 w-full rounded-md border border-gray-300"
-          />
-        </div>
-        <div className="flex">
-          <input
-            type="text"
-            placeholder="Weight"
-            value={exercise.weight}
-            onChange={(e) =>
-              setExercise({ ...exercise, weight: e.target.value })
-            }
-            className="px-4 py-2 w-1/2 mr-2 rounded-md border border-gray-300"
-          />
-          <input
-            type="text"
-            placeholder="Sets"
-            value={exercise.sets}
-            onChange={(e) => setExercise({ ...exercise, sets: e.target.value })}
-            className="px-4 py-2 w-1/2 rounded-md border border-gray-300"
-          />
-        </div>
-      </div>
-      <button
-        onClick={update}
-        className="text-neutral-50 text-2xl px-2 bg-green-300 rounded-md"
-      >
-        <FaPlus />
-      </button>
-    </div>
-  );
-};
+import { FaLessThan } from "react-icons/fa";
+import Exercise from "./exercise";
 
 const dayPage = ({ params }: { params: { day: string } }) => {
   const [user] = useAuthState(auth);
   const router = useRouter();
   const [exercise, setExercise] = useState({});
+  const [isExercise, setIsExercise] = useState(false);
+  const [delay, setDelay] = useState(false);
+
   const fetchData = async () => {
     if (user) {
       const userRef = doc(db, user.uid + "dates", params.day);
@@ -75,9 +27,33 @@ const dayPage = ({ params }: { params: { day: string } }) => {
     }
   };
 
+  const handleClick = () => {
+    setIsExercise(!isExercise);
+    setDelay(!delay);
+  };
+
+  const updateIsExercise = async () => {
+    if (user) {
+      const userRef = doc(db, user.uid + "dates", params.day);
+      await setDoc(userRef, {
+        isExercise,
+      });
+    }
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      updateIsExercise();
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [delay]);
+
   useEffect(() => {
     fetchData().then((res) => {
-      setExercise(res);
+      const { isExercise, ...exercise } = res || {};
+      setExercise(exercise);
+      setIsExercise(isExercise || false);
     });
   }, []);
 
@@ -88,11 +64,27 @@ const dayPage = ({ params }: { params: { day: string } }) => {
           <FaLessThan />
         </button>
       </div>
-      <div className="text-center">
+      <div className="text-center flex items-center justify-center gap-2">
         <h1 className="text-2xl font-bold">{params.day}</h1>
+        <button
+          onClick={handleClick}
+          className={classes(
+            "flex items-center w-12 h-6 rounded-full p-1",
+            isExercise
+              ? "justify-self-end bg-green-300"
+              : "justify-start bg-gray-200"
+          )}
+        >
+          <div
+            className={classes(
+              "size-5 bg-white rounded-full shadow transform transition ease-in-out duration-200",
+              isExercise ? "translate-x-5 " : "translate-x-0"
+            )}
+          ></div>
+        </button>
       </div>
+
       <div>{user && <Exercise user={user} date={params.day} />}</div>
-      <div></div>
     </div>
   );
 };
