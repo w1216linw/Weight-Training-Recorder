@@ -4,7 +4,7 @@ import Calendar from "./calendar";
 const Dashboard = ({ user }: { user: FirebaseUser }) => {
   return (
     <div>
-      <Calendar />
+      <Calendar user={user} />
     </div>
   );
 };

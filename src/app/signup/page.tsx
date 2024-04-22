@@ -2,6 +2,7 @@
 import { auth, db } from "@/lib/firebase";
 import { encrypt } from "@/lib/jwt";
 import { handleError, validate_inputs } from "@/lib/utils";
+import dayjs from "dayjs";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, doc, setDoc } from "firebase/firestore";
 import Image from "next/image";
@@ -31,8 +32,18 @@ const SignUpPage = () => {
         email,
         password
       );
-      const users = collection(db, credential.user.uid);
-      const userRef = doc(users, "data");
+      const userRef = doc(db, credential.user.uid, "data");
+      const exerciseCounts = collection(
+        db,
+        credential.user.uid,
+        "exercise-count",
+        "month"
+      );
+      const exerciseCountRef = doc(
+        exerciseCounts,
+        `${dayjs().month()}-${dayjs().year()}`
+      );
+      await setDoc(exerciseCountRef, {});
       await setDoc(userRef, {
         avatar: avatar,
       });

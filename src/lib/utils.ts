@@ -22,14 +22,8 @@ export const handleError = (
   }
 };
 
-export const getDate = () => {
-  const currentDate = new Date();
-  const formattedTime = currentDate.toLocaleDateString("en-US", {
-    weekday: "long",
-    day: "2-digit",
-    month: "short",
-  });
-  return formattedTime;
+export const getDate = (format: string) => {
+  return dayjs().format(format);
 };
 
 export const generateDate = (
@@ -71,4 +65,12 @@ type classesParams = string | boolean;
 
 export const classes = (...classes: classesParams[]) => {
   return classes.filter(Boolean).join(" ");
+};
+
+export const makeSet = (data: Record<string, boolean>) => {
+  return new Set(
+    Object.entries(data)
+      .filter(([_, data]) => data === true)
+      .map(([key, _]) => key)
+  );
 };
