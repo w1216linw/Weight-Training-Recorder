@@ -2,6 +2,7 @@
 
 import { auth, db } from "@/lib/firebase";
 import { classes } from "@/lib/utils";
+import dayjs from "dayjs";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -9,19 +10,42 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { FaLessThan } from "react-icons/fa";
 import Exercise from "./exercise";
 
+export type exercise = {
+  name: string;
+  weight: string;
+  sets: string;
+};
+
 const dayPage = ({ params }: { params: { day: string } }) => {
   const [user] = useAuthState(auth);
   const router = useRouter();
-  const [exercise, setExercise] = useState({});
+  const [exercise, setExercise] = useState<exercise | null>();
   const [isExercise, setIsExercise] = useState(false);
   const [delay, setDelay] = useState(false);
 
-  const fetchData = async () => {
+  const fetchDetail = async () => {
     if (user) {
-      const userRef = doc(db, user.uid + "dates", params.day);
+      const userRef = doc(db, user.uid, "exercise", "detail", params.day);
       const docSnap = await getDoc(userRef);
 
       return docSnap.exists() ? docSnap.data() : {};
+    } else {
+      return {};
+    }
+  };
+
+  const fetchIsExercise = async () => {
+    if (user) {
+      const userRef = doc(
+        db,
+        user.uid,
+        "exercise",
+        "month",
+        dayjs(params.day).format("MM-YYYY")
+      );
+      const docSnap = await getDoc(userRef);
+
+      return docSnap.exists() ? docSnap.get(params.day) : {};
     } else {
       return {};
     }
@@ -34,9 +58,15 @@ const dayPage = ({ params }: { params: { day: string } }) => {
 
   const updateIsExercise = async () => {
     if (user) {
-      const userRef = doc(db, user.uid + "dates", params.day);
+      const userRef = doc(
+        db,
+        user.uid,
+        "exercise",
+        "month",
+        dayjs(params.day).format("MM-YYYY")
+      );
       await setDoc(userRef, {
-        isExercise,
+        [dayjs(params.day).format("MM-DD-YYYY")]: isExercise,
       });
     }
   };
@@ -50,10 +80,9 @@ const dayPage = ({ params }: { params: { day: string } }) => {
   }, [delay]);
 
   useEffect(() => {
-    fetchData().then((res) => {
-      const { isExercise, ...exercise } = res || {};
-      setExercise(exercise);
-      setIsExercise(isExercise || false);
+    fetchDetail().then((res) => {
+      const exercise = res || {};
+      setExercise(exercise as exercise);
     });
   }, []);
 

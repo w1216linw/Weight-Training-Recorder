@@ -1,8 +1,7 @@
 "use client";
 import { auth, db } from "@/lib/firebase";
 import { encrypt } from "@/lib/jwt";
-import { handleError, validate_inputs } from "@/lib/utils";
-import dayjs from "dayjs";
+import { getDate, handleError, validate_inputs } from "@/lib/utils";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, doc, setDoc } from "firebase/firestore";
 import Image from "next/image";
@@ -33,16 +32,13 @@ const SignUpPage = () => {
         password
       );
       const userRef = doc(db, credential.user.uid, "data");
-      const exerciseCounts = collection(
+      const exerciseMonth = collection(
         db,
         credential.user.uid,
-        "exercise-count",
+        "exercise",
         "month"
       );
-      const exerciseCountRef = doc(
-        exerciseCounts,
-        `${dayjs().month()}-${dayjs().year()}`
-      );
+      const exerciseCountRef = doc(exerciseMonth, getDate("MM-YYYY"));
       await setDoc(exerciseCountRef, {});
       await setDoc(userRef, {
         avatar: avatar,

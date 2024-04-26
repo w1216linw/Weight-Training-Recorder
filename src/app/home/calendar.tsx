@@ -11,13 +11,7 @@ const Calendar = ({ user }: { user: FirebaseUser }) => {
   const [exercise, setExercise] = useState<Set<string>>(new Set());
   const dates = generateDate();
   const fetchExercises = async () => {
-    const docRef = doc(
-      db,
-      user.uid,
-      "exercise-count",
-      "month",
-      getDate("MM-YYYY")
-    );
+    const docRef = doc(db, user.uid, "exercise", "month", getDate("MM-YYYY"));
     const docSnap = await getDoc(docRef);
     if (!docSnap.exists()) {
       await setDoc(docRef, {});
@@ -33,8 +27,8 @@ const Calendar = ({ user }: { user: FirebaseUser }) => {
   }, []);
 
   return (
-    <div>
-      <div className="relative flex justify-center items-center h-full">
+    <div className="max-w-2xl flex flex-col mx-auto">
+      <div className="relative flex justify-center items-center">
         <h1 className="font-bold text-xl">{getDate("MMMM")}</h1>
       </div>
       <div className="grid grid-cols-7 place-items-center gap-y-8 p-4">
@@ -48,7 +42,7 @@ const Calendar = ({ user }: { user: FirebaseUser }) => {
         ))}
         {dates.map(({ date, currentMonth, today }, index) => (
           <Link
-            href={`/home/${date.format("YYYY-MM-DD")}`}
+            href={`/home/${date.format("MM-DD-YYYY")}`}
             key={index}
             className={classes(
               exercise.has(date.format("MM-DD-YYYY")) && "bg-green-300",

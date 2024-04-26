@@ -3,18 +3,24 @@ import { User as FirebaseUser } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
+import { type exercise } from "./page";
 
 const Exercise = ({ user, date }: { user: FirebaseUser; date: string }) => {
-  const [exercise, setExercise] = useState({ name: "", weight: "", sets: "" });
+  const [exercise, setExercise] = useState<exercise>({
+    name: "",
+    weight: "",
+    sets: "",
+  });
   const update = async () => {
-    const userRef = doc(db, user.uid + "dates", date);
-    await setDoc(userRef, {
+    const docRef = doc(db, user.uid, "exercise", "detail", date);
+    await setDoc(docRef, {
       [exercise.name]: {
         weight: exercise.weight,
         sets: exercise.sets,
       },
     });
   };
+
   return (
     <div className="flex gap-2">
       <div>

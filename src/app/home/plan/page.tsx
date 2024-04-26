@@ -1,6 +1,6 @@
 "use client";
 import { auth, db } from "@/lib/firebase";
-import { doc, updateDoc } from "firebase/firestore";
+import { collection, doc, updateDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -13,12 +13,14 @@ type Exercise = {
 };
 
 const planPage = () => {
+  const [user] = useAuthState(auth);
   const router = useRouter();
+  const [tag, setTag] = useState("");
   const [exercise, setExercise] = useState([
     { name: "", weight: "", sets: "" },
   ]);
+  const [error, setError] = useState("");
   const [planTitle, setPlanTitle] = useState("");
-  const [user] = useAuthState(auth);
   const addExercise = () => {
     setExercise([...exercise, { name: "", weight: "", sets: "" }]);
   };
@@ -41,29 +43,48 @@ const planPage = () => {
 
   const savePlan = async () => {
     try {
-      const userRef = doc(db, user?.uid!, "plans");
-      await updateDoc(userRef, {
-        [planTitle]: exercise,
-      });
-    } catch (error) {}
+      if (!tag) throw new Error("Tag is required");
+
+      if (user) {
+        const collectionRef = collection(db, user.uid, "exercise", "plan");
+        const userRef = doc(collectionRef, tag);
+        await updateDoc(userRef, {
+          [planTitle]: exercise,
+          tag: tag,
+        });
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      }
+    }
   };
 
   return (
     <div className="flex flex-col p-4">
+      {error && <p className="text-red-500 text-center">{error}</p>}
       <div className="relative">
         <div className="flex items-center justify-between mb-5">
           <button onClick={() => router.back()} className="text-2xl">
             <FaLessThan />
           </button>
           <h1 className="text-2xl font-bold">Pre Plan</h1>
-
-          <input
-            type="text"
-            placeholder="Title"
-            value={planTitle}
-            onChange={(e) => setPlanTitle(e.target.value)}
-            className="px-4 py-2 w-1/2 rounded-md border border-gray-300"
-          />
+          <div className="flex w-1/2">
+            <input
+              type="text"
+              placeholder="Title"
+              value={planTitle}
+              onChange={(e) => setPlanTitle(e.target.value)}
+              className="px-2 py-1 w-32 rounded-md border border-gray-300"
+            />
+            <input
+              type="text"
+              placeholder="tag"
+              value={tag}
+              onChange={(e) => setTag(e.target.value)}
+              className=" px-2 py-1 w-12 rounded-md border border-gray-300"
+            />
+          </div>
         </div>
         <div className="divide-y-2 ">
           {exercise.map((exercise, index) => (
