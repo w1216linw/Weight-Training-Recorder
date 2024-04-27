@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { Dispatch, SetStateAction } from "react";
+import { encrypt } from "./jwt";
 
 export const validate_inputs = (email: string, password: string) => {
   if (email.length < 10) {
@@ -67,10 +68,11 @@ export const classes = (...classes: classesParams[]) => {
   return classes.filter(Boolean).join(" ");
 };
 
-export const makeSet = (data: Record<string, boolean>) => {
-  return new Set(
-    Object.entries(data)
-      .filter(([_, data]) => data === true)
-      .map(([key, _]) => key)
-  );
+export const setSession = async (email: string, password: string) => {
+  const session = await encrypt({ email, password });
+  localStorage.setItem("wtr-local", session);
+};
+
+export const clearSession = () => {
+  localStorage.removeItem("wtr-local");
 };

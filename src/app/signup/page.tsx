@@ -1,7 +1,6 @@
 "use client";
 import { auth, db } from "@/lib/firebase";
-import { encrypt } from "@/lib/jwt";
-import { getDate, handleError, validate_inputs } from "@/lib/utils";
+import { getDate, handleError, setSession, validate_inputs } from "@/lib/utils";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, doc, setDoc } from "firebase/firestore";
 import Image from "next/image";
@@ -43,8 +42,7 @@ const SignUpPage = () => {
       await setDoc(userRef, {
         avatar: avatar,
       });
-      const session = await encrypt({ email, password });
-      localStorage.setItem("wtr-local", session);
+      await setSession(email, password);
       router.push("/home");
     } catch (e) {
       handleError(e, setError);

@@ -1,4 +1,5 @@
 import { db } from "@/lib/firebase";
+import { handleError } from "@/lib/utils";
 import { User as FirebaseUser } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
@@ -11,14 +12,22 @@ const Exercise = ({ user, date }: { user: FirebaseUser; date: string }) => {
     weight: "",
     sets: "",
   });
+  const [error, setError] = useState("");
   const update = async () => {
-    const docRef = doc(db, user.uid, "exercise", "detail", date);
-    await setDoc(docRef, {
-      [exercise.name]: {
-        weight: exercise.weight,
-        sets: exercise.sets,
-      },
-    });
+    try {
+      if (!exercise.name || !exercise.weight || !exercise.sets) {
+        throw new Error("Please fill in all fields");
+      }
+      const docRef = doc(db, user.uid, "exercise", "detail", date);
+      await setDoc(docRef, {
+        [exercise.name]: {
+          weight: exercise.weight,
+          sets: exercise.sets,
+        },
+      });
+    } catch (error) {
+      handleError(error, setError);
+    }
   };
 
   return (

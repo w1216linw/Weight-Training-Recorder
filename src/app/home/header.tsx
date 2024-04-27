@@ -1,5 +1,5 @@
 import { auth } from "@/lib/firebase";
-import { getDate } from "@/lib/utils";
+import { clearSession, getDate } from "@/lib/utils";
 import { User as FirebaseUser } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useSignOut } from "react-firebase-hooks/auth";
@@ -10,7 +10,7 @@ const Header = ({ user }: { user: FirebaseUser }) => {
   const [signOut, loading] = useSignOut(auth);
   const handleSignOut = async () => {
     await signOut();
-    localStorage.removeItem("wtr-local");
+    clearSession();
     router.push("/");
   };
   return (

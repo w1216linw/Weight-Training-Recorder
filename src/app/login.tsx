@@ -1,7 +1,7 @@
 "use client";
 import { auth } from "@/lib/firebase";
-import { decrypt, encrypt } from "@/lib/jwt";
-import { handleError } from "@/lib/utils";
+import { decrypt } from "@/lib/jwt";
+import { handleError, setSession } from "@/lib/utils";
 import { signInWithEmailAndPassword } from "firebase/auth";
 // import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
@@ -17,8 +17,7 @@ const Login = () => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      const session = await encrypt({ email, password });
-      localStorage.setItem("wtr-local", session);
+      await setSession(email, password);
       router.push("/home");
     } catch (err) {
       handleError(err, setError);
