@@ -12,7 +12,7 @@ type Exercise = {
   sets: string;
 };
 
-const planPage = () => {
+const PlanPage = () => {
   const [user] = useAuthState(auth);
   const router = useRouter();
   const [tag, setTag] = useState("");
@@ -150,4 +150,4 @@ const planPage = () => {
   );
 };
 
-export default planPage;
+export default PlanPage;

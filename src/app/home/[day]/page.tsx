@@ -16,7 +16,7 @@ export type exercise = {
   sets: string;
 };
 
-const dayPage = ({ params }: { params: { day: string } }) => {
+const DayPage = ({ params }: { params: { day: string } }) => {
   const [user] = useAuthState(auth);
   const router = useRouter();
   const [exercise, setExercise] = useState<exercise | null>();
@@ -164,4 +164,4 @@ const dayPage = ({ params }: { params: { day: string } }) => {
   );
 };
 
-export default dayPage;
+export default DayPage;
