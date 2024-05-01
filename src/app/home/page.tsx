@@ -4,7 +4,11 @@ import { User as FirebaseUser } from "firebase/auth";
 import Dashboard from "./dashboard";
 import Header from "./header";
 
-const HomePage = ({ user }: { user: FirebaseUser }) => {
+const HomePage = () => {
+  return withAuth(WithAuthComponent);
+};
+
+const WithAuthComponent = ({ user }: { user: FirebaseUser }) => {
   return (
     <div className="w-screen">
       <Header user={user} />
@@ -15,5 +19,4 @@ const HomePage = ({ user }: { user: FirebaseUser }) => {
     </div>
   );
 };
-
-export default withAuth(HomePage);
+export default HomePage;
