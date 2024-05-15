@@ -1,14 +1,28 @@
 "use client";
-import withAuth from "@/lib/withAuth";
+import { auth } from "@/lib/firebase";
 import { User as FirebaseUser } from "firebase/auth";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import Dashboard from "./dashboard";
 import Header from "./header";
 
 const HomePage = () => {
-  return withAuth(WithAuthComponent);
-};
+  const [user, setUser] = useState<FirebaseUser>();
+  const router = useRouter();
 
-const WithAuthComponent = ({ user }: { user: FirebaseUser }) => {
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        router.push("/");
+      }
+    });
+
+    return unsubscribe;
+  }, [router]);
+
+  if (!user) return <div>Loading...</div>;
   return (
     <div className="w-screen">
       <Header user={user} />
@@ -19,4 +33,5 @@ const WithAuthComponent = ({ user }: { user: FirebaseUser }) => {
     </div>
   );
 };
+
 export default HomePage;

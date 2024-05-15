@@ -3,6 +3,7 @@ import { User as FirebaseUser } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { auth } from "./firebase";
+
 export default function withAuth<P extends object>(
   Component: React.ComponentType<P>
 ) {
