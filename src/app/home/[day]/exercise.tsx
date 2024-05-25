@@ -1,12 +1,13 @@
 import { db } from "@/lib/firebase";
 import { handleError } from "@/lib/utils";
 import { User as FirebaseUser } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { type exercise } from "./page";
 
 const Exercise = ({ user, date }: { user: FirebaseUser; date: string }) => {
+  // const router = useRouter();
   const [exercise, setExercise] = useState<exercise>({
     name: "",
     weight: "",
@@ -19,12 +20,13 @@ const Exercise = ({ user, date }: { user: FirebaseUser; date: string }) => {
         throw new Error("Please fill in all fields");
       }
       const docRef = doc(db, user.uid, "exercise", "detail", date);
-      await setDoc(docRef, {
+      await updateDoc(docRef, {
         [exercise.name]: {
           weight: exercise.weight,
           sets: exercise.sets,
         },
       });
+      // router.refresh();
     } catch (error) {
       handleError(error, setError);
     }
