@@ -24,7 +24,7 @@ const HomePage = () => {
 
   if (!user) return <div>Loading...</div>;
   return (
-    <div className="w-screen">
+    <div>
       <Header user={user} />
       {/* <Link href={"/home/plan"} className="text-lg">
         Add plan

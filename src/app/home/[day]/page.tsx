@@ -16,10 +16,20 @@ export type exercise = {
   sets: string;
 };
 
+function formateExercise(
+  exercise: Record<string, Record<string, string>>
+): exercise[] {
+  return Object.keys(exercise).map((elem) => ({
+    name: elem,
+    sets: String(exercise[elem].sets),
+    weight: String(exercise[elem].weight),
+  }));
+}
+
 const DayPage = ({ params }: { params: { day: string } }) => {
   const [user] = useAuthState(auth);
   const router = useRouter();
-  const [exercise, setExercise] = useState<exercise | null>();
+  const [exercise, setExercise] = useState<exercise[]>([]);
   const [isExercise, setIsExercise] = useState(false);
   const [tag, setTag] = useState("");
   const [delay, setDelay] = useState(false);
@@ -66,11 +76,9 @@ const DayPage = ({ params }: { params: { day: string } }) => {
         "month",
         dayjs(params.day).format("MM-YYYY")
       );
-      const docSnap = (await getDoc(userRef)).get(
-        dayjs(params.day).format("MM-DD-YYYY")
-      );
+      const docSnap = (await getDoc(userRef)).get(params.day);
       await updateDoc(userRef, {
-        [dayjs(params.day).format("MM-DD-YYYY")]: { ...docSnap, tag },
+        [params.day]: { ...docSnap, tag },
       });
     }
   };
@@ -84,30 +92,31 @@ const DayPage = ({ params }: { params: { day: string } }) => {
         "month",
         dayjs(params.day).format("MM-YYYY")
       );
-      const docSnap = (await getDoc(userRef)).get(
-        dayjs(params.day).format("MM-DD-YYYY")
-      );
+      const docSnap = (await getDoc(userRef)).get(params.day);
       await updateDoc(userRef, {
-        [dayjs(params.day).format("MM-DD-YYYY")]: { ...docSnap, isExercise },
+        [params.day]: { ...docSnap, isExercise },
       });
     }
   };
 
+  // initial the details and isExercise
   useEffect(() => {
-    fetchDetail().then((res) => {
-      const exercise = res || {};
-      setExercise(exercise as exercise);
-    });
     fetchIsExercise().then((res) => {
       setIsExercise(res?.isExercise);
+      setTag(res?.tag);
+    });
+    fetchDetail().then((res) => {
+      const exercise = res ? formateExercise(res) : [];
+
+      setExercise(exercise);
     });
   }, []);
 
+  // debounce for updating isExercise
   useEffect(() => {
     setMounted(true);
     return () => setMounted(false);
   }, []);
-
   useEffect(() => {
     if (mounted) {
       const timer = setTimeout(() => {
@@ -154,12 +163,24 @@ const DayPage = ({ params }: { params: { day: string } }) => {
           value={tag}
           onChange={(e) => setTag(e.target.value)}
         />
-        <button className="" onClick={handleSaveTag}>
+        <button className="" onClick={() => handleSaveTag()}>
           save
         </button>
       </div>
 
       <div>{user && <Exercise user={user} date={params.day} />}</div>
+      <div>
+        {exercise.length > 0 &&
+          exercise.map((elem) => (
+            <div key={elem.name} className="my-4 p-4 border rounded shadow-md">
+              <h1 className="text-lg font-bold mb-2">{elem.name}</h1>
+              <div className="flex justify-between">
+                <p className="text-gray-700">Weight: {elem.weight}</p>
+                <p className="text-gray-700">Sets: {elem.sets}</p>
+              </div>
+            </div>
+          ))}
+      </div>
     </div>
   );
 };

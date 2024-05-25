@@ -3,5 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply bg-neutral-100 text-sm text-gray-900 font-sans font-semibold;
+  @apply bg-neutral-100 text-sm text-gray-900 font-sans font-semibold flex flex-col items-center;
+  padding: 0;
+  margin: 0;
 }
