@@ -17,13 +17,15 @@ export type exercise = {
 };
 
 function formateExercise(
-  exercise: Record<string, Record<string, string>>
+  exercise: Record<string, Record<string, string>> | undefined
 ): exercise[] {
-  return Object.keys(exercise).map((elem) => ({
-    name: elem,
-    sets: String(exercise[elem].sets),
-    weight: String(exercise[elem].weight),
-  }));
+  if (typeof exercise === "undefined") return [];
+  else
+    return Object.keys(exercise).map((elem) => ({
+      name: elem,
+      sets: String(exercise[elem].sets),
+      weight: String(exercise[elem].weight),
+    }));
 }
 
 const DayPage = ({ params }: { params: { day: string } }) => {
@@ -34,15 +36,12 @@ const DayPage = ({ params }: { params: { day: string } }) => {
   const [tag, setTag] = useState("");
   const [delay, setDelay] = useState(false);
   const [mounted, setMounted] = useState(false);
-
   const fetchDetail = async () => {
     if (user) {
       const userRef = doc(db, user.uid, "exercise", "detail", params.day);
       const docSnap = await getDoc(userRef);
 
-      return docSnap.exists() ? docSnap.data() : {};
-    } else {
-      return {};
+      setExercise(formateExercise(docSnap.data()));
     }
   };
 
@@ -105,11 +104,7 @@ const DayPage = ({ params }: { params: { day: string } }) => {
       setIsExercise(res?.isExercise);
       setTag(res?.tag);
     });
-    fetchDetail().then((res) => {
-      const exercise = res ? formateExercise(res) : [];
-
-      setExercise(exercise);
-    });
+    fetchDetail();
   }, []);
 
   // debounce for updating isExercise
@@ -168,7 +163,11 @@ const DayPage = ({ params }: { params: { day: string } }) => {
         </button>
       </div>
 
-      <div>{user && <Exercise user={user} date={params.day} />}</div>
+      <div>
+        {user && (
+          <Exercise user={user} date={params.day} fetchDetail={fetchDetail} />
+        )}
+      </div>
       <div>
         {exercise.length > 0 &&
           exercise.map((elem) => (

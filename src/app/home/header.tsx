@@ -16,7 +16,7 @@ const Header = ({ user }: { user: FirebaseUser }) => {
   return (
     <div className="w-full flex items-center justify-between p-4 border-gray-200 border-b">
       <Avatar user={user} />
-      <div className=" space-y-4 min-w-max">
+      <div className="text-right space-y-4 min-w-max">
         <p>{getDate("dddd, MMM DD")}</p>
         <button
           onClick={handleSignOut}

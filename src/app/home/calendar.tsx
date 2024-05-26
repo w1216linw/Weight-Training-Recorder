@@ -35,7 +35,6 @@ const Calendar = ({ user }: { user: FirebaseUser }) => {
       await setDoc(docRef, {});
     } else {
       const data = docSnap.data();
-      console.log(data);
       setExercise(data);
     }
   };
