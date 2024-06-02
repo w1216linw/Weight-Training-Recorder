@@ -33,7 +33,7 @@ const DayPage = ({ params }: { params: { day: string } }) => {
   const router = useRouter();
   const [exercise, setExercise] = useState<exercise[]>([]);
   const [isExercise, setIsExercise] = useState(false);
-  const [tag, setTag] = useState("");
+  const [tag, setTag] = useState<string>("");
   const [delay, setDelay] = useState(false);
   const [mounted, setMounted] = useState(false);
   const fetchDetail = async () => {
@@ -125,7 +125,7 @@ const DayPage = ({ params }: { params: { day: string } }) => {
   return (
     <div className="p-2">
       <div className="flex items-center">
-        <button onClick={() => router.push("/home")} className="text-2xl">
+        <button onClick={() => router.back()} className="text-2xl">
           <FaLessThan />
         </button>
       </div>

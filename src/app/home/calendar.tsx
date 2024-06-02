@@ -1,11 +1,20 @@
 import { db } from "@/lib/firebase";
 import { classes, generateDate, getDate } from "@/lib/utils";
+import dayjs from "dayjs";
 import { User as FirebaseUser } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import Link from "next/link";
+import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { FaGreaterThan, FaLessThan } from "react-icons/fa6";
 
 const week = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+const getMonth = (searchParam: ReadonlyURLSearchParams) => {
+  const month = searchParam.get("month");
+  if (!month) return dayjs().month();
+  else return Number(month);
+};
 
 const getBgColor = (
   todayAndExercise: boolean,
@@ -25,11 +34,21 @@ const getBgColor = (
 };
 
 const Calendar = ({ user }: { user: FirebaseUser }) => {
+  const searchParam = useSearchParams();
   const [exercise, setExercise] =
     useState<Record<string, { isExercise: boolean; tag: string }>>();
-  const dates = generateDate();
+  const dates = generateDate(
+    Number(searchParam.get("month")) || dayjs().month()
+  );
   const fetchExercises = async () => {
-    const docRef = doc(db, user.uid, "exercise", "month", getDate("MM-YYYY"));
+    const month = getMonth(searchParam);
+    const docRef = doc(
+      db,
+      user.uid,
+      "exercise",
+      "month",
+      dayjs().month(month).format("MM-YYYY")
+    );
     const docSnap = await getDoc(docRef);
     if (!docSnap.exists()) {
       await setDoc(docRef, {});
@@ -41,12 +60,22 @@ const Calendar = ({ user }: { user: FirebaseUser }) => {
 
   useEffect(() => {
     fetchExercises();
-  }, []);
+  }, [searchParam]);
 
   return (
     <div className="max-w-2xl flex flex-col mx-auto">
-      <div className="relative flex justify-center items-center">
-        <h1 className="font-bold text-xl">{getDate("MMMM")}</h1>
+      <div className="relative flex justify-between items-center">
+        <Link href={`/home?month=${getMonth(searchParam) - 1}`}>
+          <FaLessThan />
+        </Link>
+        <h1 className="font-bold text-xl">
+          {!!searchParam.get("month")
+            ? dayjs().month(+searchParam.get("month")!).format("MMMM")
+            : getDate("MMMM")}
+        </h1>
+        <Link href={`/home?month=${getMonth(searchParam) + 1}`}>
+          <FaGreaterThan />
+        </Link>
       </div>
       <div className="grid grid-cols-7 place-items-center gap-y-8 p-4">
         {week.map((day, index) => (
