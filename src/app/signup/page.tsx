@@ -1,4 +1,5 @@
 "use client";
+import { avatars } from "@/lib/data";
 import { auth, db } from "@/lib/firebase";
 import { getDate, handleError, setSession, validate_inputs } from "@/lib/utils";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -6,13 +7,6 @@ import { collection, doc, setDoc } from "firebase/firestore";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-
-const avatars = [
-  { url: "/images/dog.png", value: "dog" },
-  { url: "/images/gorilla.png", value: "gorilla" },
-  { url: "/images/panda.png", value: "panda" },
-  { url: "/images/penguin.png", value: "penguin" },
-];
 
 const SignUpPage = () => {
   const [email, setEmail] = useState("");

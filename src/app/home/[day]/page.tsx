@@ -3,17 +3,19 @@
 import { auth, db } from "@/lib/firebase";
 import { classes } from "@/lib/utils";
 import dayjs from "dayjs";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { deleteField, doc, getDoc, updateDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { FaLessThan } from "react-icons/fa";
+import { FiDelete } from "react-icons/fi";
 import Exercise from "./exercise";
 
 export type exercise = {
   name: string;
   weight: string;
   sets: string;
+  reps: string;
 };
 
 function formateExercise(
@@ -25,6 +27,7 @@ function formateExercise(
       name: elem,
       sets: String(exercise[elem].sets),
       weight: String(exercise[elem].weight),
+      reps: String(exercise[elem].reps || ""),
     }));
 }
 
@@ -58,6 +61,16 @@ const DayPage = ({ params }: { params: { day: string } }) => {
       return docSnap.exists() ? docSnap.get(params.day) : {};
     } else {
       return {};
+    }
+  };
+
+  const deleteExercise = async (exercise: string) => {
+    if (user) {
+      const docRef = doc(db, user.uid, "exercise", "detail", params.day);
+      await updateDoc(docRef, { [exercise]: deleteField() });
+      fetchDetail();
+    } else {
+      return;
     }
   };
 
@@ -171,12 +184,24 @@ const DayPage = ({ params }: { params: { day: string } }) => {
       <div>
         {exercise.length > 0 &&
           exercise.map((elem) => (
-            <div key={elem.name} className="my-4 p-4 border rounded shadow-md">
-              <h1 className="text-lg font-bold mb-2">{elem.name}</h1>
-              <div className="flex justify-between">
-                <p className="text-gray-700">Weight: {elem.weight}</p>
-                <p className="text-gray-700">Sets: {elem.sets}</p>
+            <div
+              key={elem.name}
+              className="my-4 p-4 border rounded shadow-md flex justify-between"
+            >
+              <div className="flex-1 ">
+                <h1 className="text-lg font-bold mb-2">{elem.name}</h1>
+                <div className="flex justify-between">
+                  <p className="text-gray-700">Weight: {elem.weight}</p>
+                  <p className="text-gray-700">Reps: {elem.reps}</p>
+                  <p className="text-gray-700">Sets: {elem.sets}</p>
+                </div>
               </div>
+              <button
+                className="w-10 flex items-center justify-end"
+                onClick={() => deleteExercise(elem.name)}
+              >
+                <FiDelete size={18} className="text-red-400" />
+              </button>
             </div>
           ))}
       </div>

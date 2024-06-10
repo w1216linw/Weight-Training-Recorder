@@ -29,6 +29,11 @@ const HomePage = () => {
       {/* <Link href={"/home/plan"} className="text-lg">
         Add plan
       </Link> */}
+      {/* <div className="bg-white p-2 rounded-md flex">
+        <Link href="home/setting" className="bg-neutral-100 rounded-md p-2">
+          <IoIosSettings fontSize={36} />
+        </Link>
+      </div> */}
       <Dashboard user={user} />
     </div>
   );

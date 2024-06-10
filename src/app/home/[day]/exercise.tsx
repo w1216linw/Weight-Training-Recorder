@@ -2,7 +2,6 @@ import { db } from "@/lib/firebase";
 import { handleError } from "@/lib/utils";
 import { User as FirebaseUser } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { type exercise } from "./page";
@@ -16,13 +15,22 @@ const Exercise = ({
   date: string;
   fetchDetail: () => void;
 }) => {
-  const router = useRouter();
-  const path = usePathname();
   const [exercise, setExercise] = useState<exercise>({
     name: "",
     weight: "",
+    reps: "",
     sets: "",
   });
+
+  const resetExercise = () => {
+    setExercise({
+      name: "",
+      weight: "",
+      reps: "",
+      sets: "",
+    });
+  };
+
   const [error, setError] = useState("");
   const update = async () => {
     try {
@@ -37,11 +45,12 @@ const Exercise = ({
           [exercise.name]: {
             weight: exercise.weight,
             sets: exercise.sets,
+            reps: exercise.reps,
           },
         },
         { merge: true }
       );
-
+      resetExercise();
       fetchDetail();
     } catch (error) {
       handleError(error, setError);
@@ -63,13 +72,22 @@ const Exercise = ({
               className="px-4 py-2 w-full rounded-md border border-gray-300"
             />
           </div>
-          <div className="flex">
+          <div className="flex max-w-[359px]">
             <input
               type="text"
               placeholder="Weight"
               value={exercise.weight}
               onChange={(e) =>
                 setExercise({ ...exercise, weight: e.target.value })
+              }
+              className="px-4 py-2 w-1/2 mr-2 rounded-md border border-gray-300"
+            />
+            <input
+              type="text"
+              placeholder="Reps"
+              value={exercise.reps}
+              onChange={(e) =>
+                setExercise({ ...exercise, reps: e.target.value })
               }
               className="px-4 py-2 w-1/2 mr-2 rounded-md border border-gray-300"
             />
