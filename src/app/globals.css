@@ -7,3 +7,28 @@ body {
   padding: 0;
   margin: 0;
 }
+
+@layer components {
+  .primary-col {
+    @apply bg-[#35524a];
+  }
+
+  .accent-col {
+    @apply text-[#E7E6F7];
+  }
+}
+
+.container {
+  background-color: white;
+  padding: 0.25rem 0.5rem;
+  overflow: hidden;
+  transition: height 0.3s ease;
+}
+
+.h-show {
+  height: 11rem;
+}
+
+.h-close {
+  height: 2rem;
+}

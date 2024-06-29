@@ -1,7 +1,7 @@
 "use client";
 
 import { auth, db } from "@/lib/firebase";
-import { classes } from "@/lib/utils";
+import { classes, objToArray } from "@/lib/utils";
 import dayjs from "dayjs";
 import { deleteField, doc, getDoc, updateDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
@@ -18,19 +18,6 @@ export type exercise = {
   reps: string;
 };
 
-function formateExercise(
-  exercise: Record<string, Record<string, string>> | undefined
-): exercise[] {
-  if (typeof exercise === "undefined") return [];
-  else
-    return Object.keys(exercise).map((elem) => ({
-      name: elem,
-      sets: String(exercise[elem].sets),
-      weight: String(exercise[elem].weight),
-      reps: String(exercise[elem].reps || ""),
-    }));
-}
-
 const DayPage = ({ params }: { params: { day: string } }) => {
   const [user] = useAuthState(auth);
   const router = useRouter();
@@ -44,7 +31,7 @@ const DayPage = ({ params }: { params: { day: string } }) => {
       const userRef = doc(db, user.uid, "exercise", "detail", params.day);
       const docSnap = await getDoc(userRef);
 
-      setExercise(formateExercise(docSnap.data()));
+      setExercise(objToArray<exercise>("name", docSnap.data()));
     }
   };
 
@@ -136,7 +123,7 @@ const DayPage = ({ params }: { params: { day: string } }) => {
   }, [delay]);
 
   return (
-    <div className="p-2">
+    <div className="w-[375px] p-2 space-y-3 ">
       <div className="flex items-center">
         <button onClick={() => router.back()} className="text-2xl">
           <FaLessThan />
@@ -155,7 +142,7 @@ const DayPage = ({ params }: { params: { day: string } }) => {
         >
           <div
             className={classes(
-              "size-5 bg-white rounded-full shadow transform transition ease-in-out duration-200",
+              "size-5 bg-neutral-100 rounded-full shadow transform transition ease-in-out duration-200",
               isExercise ? "translate-x-5 " : "translate-x-0"
             )}
           ></div>

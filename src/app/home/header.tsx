@@ -14,7 +14,7 @@ const Header = ({ user }: { user: FirebaseUser }) => {
     router.push("/");
   };
   return (
-    <div className="w-full flex items-center justify-between p-4 border-gray-200 border-b mb-2">
+    <div className="w-full flex items-center justify-between p-4 border-[#E7E6F7] border-b-2 mb-2 text-[#E7E6F7]">
       <Avatar user={user} />
       <div className="text-right space-y-4 min-w-max">
         <p>{getDate("dddd, MMM DD")}</p>

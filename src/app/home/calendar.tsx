@@ -63,7 +63,7 @@ const Calendar = ({ user }: { user: FirebaseUser }) => {
   }, [searchParam]);
 
   return (
-    <div className="max-w-2xl flex flex-col mx-auto">
+    <div className="flex flex-col mx-auto p-2 bg-neutral-100 rounded-md ">
       <div className="relative flex justify-between items-center">
         <Link href={`/home?month=${getMonth(searchParam) - 1}`}>
           <FaLessThan />
@@ -100,15 +100,15 @@ const Calendar = ({ user }: { user: FirebaseUser }) => {
               ),
 
               !currentMonth && "text-gray-400",
-              "grid place-items-center size-9 rounded-full relative"
+              "grid place-items-center size-9 rounded-full relative "
             )}
           >
             {!!exercise && exercise[date.format("YYYY-MM-DD")]?.tag && (
-              <span className="absolute bg-inherit -top-6 left-0 right-0 -bottom-0 rounded-full grid items-start justify-center -z-50 pt-2 uppercase">
-                {exercise[date.format("YYYY-MM-DD")]?.tag}
+              <span className="absolute bg-inherit -top-6 left-0 right-0 -bottom-0  rounded-full grid items-start justify-center pt-2 uppercase">
+                {exercise[date.format("YYYY-MM-DD")].tag}
               </span>
             )}
-            <p>{date.date()}</p>
+            <p className="z-10">{date.date()}</p>
           </Link>
         ))}
       </div>

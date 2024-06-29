@@ -76,3 +76,15 @@ export const setSession = async (email: string, password: string) => {
 export const clearSession = () => {
   localStorage.removeItem("wtr-local");
 };
+
+export const objToArray = <T>(
+  title: string,
+  exercise: Record<string, Record<string, string>> | undefined
+): T[] => {
+  if (typeof exercise === "undefined") return [];
+  else
+    return Object.entries(exercise).map(([key, value]) => ({
+      [title]: key,
+      ...value,
+    })) as T[];
+};
