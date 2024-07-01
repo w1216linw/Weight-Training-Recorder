@@ -55,9 +55,9 @@ const Avatar = ({ user }: { user: FirebaseUser }) => {
             <button
               onClick={() => setNewAvatar(elem.value)}
               disabled={elem.value === selectAvatar}
+              key={elem.value}
             >
               <Image
-                key={elem.value}
                 src={elem.url}
                 alt={elem.value}
                 width={48}
