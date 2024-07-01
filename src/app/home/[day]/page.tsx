@@ -11,7 +11,7 @@ import { FaLessThan } from "react-icons/fa";
 import { FiDelete } from "react-icons/fi";
 import Exercise from "./exercise";
 
-export type exercise = {
+export type ExerciseType = {
   name: string;
   weight: string;
   sets: string;
@@ -21,7 +21,7 @@ export type exercise = {
 const DayPage = ({ params }: { params: { day: string } }) => {
   const [user] = useAuthState(auth);
   const router = useRouter();
-  const [exercise, setExercise] = useState<exercise[]>([]);
+  const [exercise, setExercise] = useState<ExerciseType[]>([]);
   const [isExercise, setIsExercise] = useState(false);
   const [tag, setTag] = useState<string>("");
   const [delay, setDelay] = useState(false);
@@ -31,7 +31,7 @@ const DayPage = ({ params }: { params: { day: string } }) => {
       const userRef = doc(db, user.uid, "exercise", "detail", params.day);
       const docSnap = await getDoc(userRef);
 
-      setExercise(objToArray<exercise>("name", docSnap.data()));
+      setExercise(objToArray<ExerciseType>("name", docSnap.data()));
     }
   };
 
@@ -176,7 +176,9 @@ const DayPage = ({ params }: { params: { day: string } }) => {
               className="my-4 p-4 border rounded shadow-md flex justify-between"
             >
               <div className="flex-1 ">
-                <h1 className="text-lg font-bold mb-2">{elem.name}</h1>
+                <h1 className="text-lg font-bold mb-2 capitalize">
+                  {elem.name}
+                </h1>
                 <div className="flex justify-between">
                   <p className="text-gray-700">Weight: {elem.weight}</p>
                   <p className="text-gray-700">Reps: {elem.reps}</p>

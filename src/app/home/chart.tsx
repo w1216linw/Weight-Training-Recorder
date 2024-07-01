@@ -45,6 +45,9 @@ const Chart = ({ data }: { data: Data[] }) => {
       const d = new Date(b.date);
       return c < d ? -1 : 1;
     });
+  if (dateVolumeSet.length < 1) {
+    return <div className="grid place-items-center h-[300px]">no data</div>;
+  }
   return (
     <div className="overflow-x-scroll w-full">
       <LineChart

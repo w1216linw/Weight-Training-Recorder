@@ -5,19 +5,17 @@ import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import Chart from "./chart";
 
-type CompoundMovement =
-  | "pull up"
+export type CompoundMovement =
   | "bench press"
   | "squat"
   | "deadlift"
-  | "Press push";
+  | "press push";
 
 const compoundMovement: CompoundMovement[] = [
-  "pull up",
   "bench press",
-  "squat",
+  "press push",
   "deadlift",
-  "Press push",
+  "squat",
 ];
 
 type Weight = {
@@ -39,11 +37,10 @@ type Movement = {
 };
 
 type Process = {
-  "pull up"?: Movement;
   "bench press"?: Movement;
   squat?: Movement;
   deadlift?: Movement;
-  "Press push"?: Movement;
+  "press push"?: Movement;
 };
 
 const CompoundTraining = ({ user }: { user: FirebaseUser }) => {
@@ -80,7 +77,7 @@ const CompoundTraining = ({ user }: { user: FirebaseUser }) => {
             key={index}
             className={classes(
               active === elem ? "shadow-inner shadow-gray-400" : "",
-              "p-1 rounded-md capitalize hover:outline-1"
+              "py-1 px-2 rounded-md capitalize hover:outline-1"
             )}
             onClick={() => {
               setActive(elem);
@@ -97,13 +94,9 @@ const CompoundTraining = ({ user }: { user: FirebaseUser }) => {
           <p>{process[active]?.pr?.date}</p>
         </div>
       )}
-      {active in process && !!process[active]?.graph ? (
-        <div className="bg-neutral-100">
-          <Chart data={objToArray("date", process[active]?.graph)} />
-        </div>
-      ) : (
-        <div className="grid place-items-center h-[300px]">no data</div>
-      )}
+      <div className="bg-neutral-100">
+        <Chart data={objToArray("date", process[active]?.graph)} />
+      </div>
     </div>
   );
 };
