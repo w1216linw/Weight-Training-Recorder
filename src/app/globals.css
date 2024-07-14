@@ -3,23 +3,12 @@
 @tailwind utilities;
 
 body {
-  @apply bg-neutral-100 text-sm text-gray-900 font-sans font-semibold flex flex-col items-center;
+  @apply bg-base-100 text-sm text-primary-content font-sans font-semibold flex flex-col items-center;
   padding: 0;
   margin: 0;
 }
 
-@layer components {
-  .primary-col {
-    @apply bg-[#35524a];
-  }
-
-  .accent-col {
-    @apply text-[#E7E6F7];
-  }
-}
-
 .container {
-  background-color: white;
   padding: 0.25rem 0.5rem;
   overflow: hidden;
   transition: height 0.3s ease;

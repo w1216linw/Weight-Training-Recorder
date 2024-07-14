@@ -4,6 +4,7 @@ import { User as FirebaseUser } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import Chart from "./chart";
+import LoadingChart from "./loading-chart";
 
 export type CompoundMovement =
   | "bench press"
@@ -46,8 +47,10 @@ type Process = {
 const CompoundTraining = ({ user }: { user: FirebaseUser }) => {
   const [active, setActive] = useState<CompoundMovement>("bench press");
   const [process, setProcess] = useState<Process>({});
+  const [loading, setLoading] = useState(false);
 
   const fetchProcess = async () => {
+    setLoading(true);
     const prRef = doc(db, user.uid, "exercise", "compound", active);
     const graphRef = doc(
       db,
@@ -60,7 +63,7 @@ const CompoundTraining = ({ user }: { user: FirebaseUser }) => {
     );
     const prSnap = (await getDoc(prRef)).data();
     const graphSnap = (await getDoc(graphRef)).data();
-
+    setLoading(false);
     setProcess({ ...process, [active]: { ...prSnap, graph: graphSnap } });
   };
 
@@ -70,7 +73,7 @@ const CompoundTraining = ({ user }: { user: FirebaseUser }) => {
   }, [active]);
 
   return (
-    <div className="mb-2 p-2 bg-neutral-100 rounded-md">
+    <div className="mb-2 p-2 bg-neutral-100 rounded-md w-full">
       <div className="flex justify-between">
         {compoundMovement.map((elem, index) => (
           <button
@@ -87,16 +90,20 @@ const CompoundTraining = ({ user }: { user: FirebaseUser }) => {
           </button>
         ))}
       </div>
-      {active in process && (
-        <div className="flex gap-2 p-2">
-          <h1>PR:</h1>
-          <p>{process[active]?.pr?.weight} lb</p>
-          <p>{process[active]?.pr?.date}</p>
-        </div>
+      {loading ? (
+        <LoadingChart />
+      ) : (
+        <>
+          {active in process && (
+            <div className="flex gap-2 p-2">
+              <h1>PR:</h1>
+              <p>{process[active]?.pr?.weight} lb</p>
+              <p>{process[active]?.pr?.date}</p>
+            </div>
+          )}
+          <Chart data={objToArray("date", process[active]?.graph)} />
+        </>
       )}
-      <div className="bg-neutral-100">
-        <Chart data={objToArray("date", process[active]?.graph)} />
-      </div>
     </div>
   );
 };

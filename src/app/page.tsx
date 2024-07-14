@@ -3,10 +3,10 @@ import Login from "./login";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center">
-      <div className="bg-gray-300 p-4 rounded-lg space-y-5">
+    <main className="flex w-full min-h-screen flex-col items-center justify-center text-primary-content font-bold bg-base-100">
+      <div className="bg-primary p-2 rounded-lg space-y-5 w-3/4 max-w-[375px]">
         <Login />
-        <Link href="/signup" className="block mt-2 text-neutral-900 font-serif">
+        <Link href="/signup" className="block mt-2">
           Register
         </Link>
       </div>

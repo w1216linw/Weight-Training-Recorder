@@ -61,7 +61,6 @@ const Chart = ({ data }: { data: Data[] }) => {
           bottom: 5,
         }}
       >
-        {/* <CartesianGrid strokeDasharray="3 3" /> */}
         <XAxis />
         <YAxis />
         <Tooltip content={<CustomTooltip />} />

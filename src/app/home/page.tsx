@@ -26,7 +26,7 @@ const HomePage = () => {
 
   if (!user) return <div>Loading...</div>;
   return (
-    <div className="w-[375px] p-2 space-y-3 bg-[#35524A]">
+    <div className="min-w-[375px] max-w-[650px] w-screen p-2 space-y-3 bg-[#35524A]">
       <Header user={user} />
       {/* <Link href={"/home/plan"} className="text-lg">
         Add plan

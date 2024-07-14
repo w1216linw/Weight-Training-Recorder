@@ -123,7 +123,7 @@ const DayPage = ({ params }: { params: { day: string } }) => {
   }, [delay]);
 
   return (
-    <div className="w-[375px] p-2 space-y-3 ">
+    <div className="min-w-[375px] p-2 space-y-3 ">
       <div className="flex items-center">
         <button onClick={() => router.back()} className="text-2xl">
           <FaLessThan />
