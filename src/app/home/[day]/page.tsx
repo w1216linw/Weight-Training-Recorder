@@ -123,7 +123,7 @@ const DayPage = ({ params }: { params: { day: string } }) => {
   }, [delay]);
 
   return (
-    <div className="min-w-[375px] p-2 space-y-3 ">
+    <div className="p-2 space-y-3 ">
       <div className="flex items-center">
         <button onClick={() => router.back()} className="text-2xl">
           <FaLessThan />
@@ -184,6 +184,10 @@ const DayPage = ({ params }: { params: { day: string } }) => {
                   <p className="text-gray-700">Reps: {elem.reps}</p>
                   <p className="text-gray-700">Sets: {elem.sets}</p>
                 </div>
+                <p>
+                  Volume:{" "}
+                  {Number(elem.weight) * Number(elem.reps) * Number(elem.sets)}
+                </p>
               </div>
               <button
                 className="w-10 flex items-center justify-end"

@@ -10,12 +10,12 @@ const SettingPage = () => {
   const [user] = useAuthState(auth);
 
   return (
-    <div className="w-[375px] p-2 space-y-3 bg-[#35524A]">
+    <div className="p-2 space-y-3 border">
       <button onClick={() => router.back()} className="text-2xl">
         <FaLessThan />
       </button>
       <h1 className="text-xl accent-col text-center">Setting</h1>
-      <div className=" p-2 rounded-md text-[]">
+      <div className=" p-2 rounded-md text-neutral-100 bg-[#35524A]">
         {user && <Avatar user={user} />}
       </div>
     </div>

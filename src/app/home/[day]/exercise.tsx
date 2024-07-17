@@ -49,7 +49,6 @@ const Exercise = ({
         },
         { merge: true }
       );
-      console.log(exercise.weight);
       if (!prSnap?.pr) {
         await setDoc(
           prRef,
@@ -62,7 +61,6 @@ const Exercise = ({
           { merge: true }
         );
       } else if (Number(prSnap.pr.weight) <= Number(exercise.weight)) {
-        console.log("prSnap.pr.weight <= exercise.weight");
         await setDoc(
           prRef,
           {

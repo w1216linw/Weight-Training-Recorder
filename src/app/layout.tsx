@@ -13,7 +13,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-theme="cupcake">
-      <body>{children}</body>
+      <body>
+        <main className="min-w-[375px] max-w-[650px] w-screen">{children}</main>
+      </body>
     </html>
   );
 }
