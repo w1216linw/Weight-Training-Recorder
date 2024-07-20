@@ -176,18 +176,22 @@ const DayPage = ({ params }: { params: { day: string } }) => {
               className="my-4 p-4 border rounded shadow-md flex justify-between"
             >
               <div className="flex-1 ">
-                <h1 className="text-lg font-bold mb-2 capitalize">
-                  {elem.name}
-                </h1>
+                <div className="flex justify-between items-center">
+                  <h1 className="text-lg font-bold mb-2 capitalize">
+                    {elem.name}
+                  </h1>
+                  <p className="text-gray-500">
+                    V:{" "}
+                    {Number(elem.weight) *
+                      Number(elem.reps) *
+                      Number(elem.sets)}
+                  </p>
+                </div>
                 <div className="flex justify-between">
                   <p className="text-gray-700">Weight: {elem.weight}</p>
                   <p className="text-gray-700">Reps: {elem.reps}</p>
                   <p className="text-gray-700">Sets: {elem.sets}</p>
                 </div>
-                <p>
-                  Volume:{" "}
-                  {Number(elem.weight) * Number(elem.reps) * Number(elem.sets)}
-                </p>
               </div>
               <button
                 className="w-10 flex items-center justify-end"

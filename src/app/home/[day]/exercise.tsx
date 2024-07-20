@@ -113,9 +113,9 @@ const Exercise = ({
   };
 
   return (
-    <>
+    <div>
       <div className="flex gap-2">
-        <div>
+        <div className="flex-1">
           <div className="mb-2">
             <input
               type="text"
@@ -130,7 +130,7 @@ const Exercise = ({
               className="px-4 py-2 w-full rounded-md border border-gray-300"
             />
           </div>
-          <div className="flex max-w-[359px]">
+          <div className="flex">
             <input
               type="text"
               placeholder="Weight"
@@ -168,7 +168,7 @@ const Exercise = ({
         </button>
       </div>
       {error !== "" && <div className="flex">{error}</div>}
-    </>
+    </div>
   );
 };
 
