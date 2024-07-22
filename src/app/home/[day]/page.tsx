@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { FaLessThan } from "react-icons/fa";
 import { FiDelete } from "react-icons/fi";
+import { useHomeContext } from "../homeContext";
 import Exercise from "./exercise";
 
 export type ExerciseType = {
@@ -19,6 +20,7 @@ export type ExerciseType = {
 };
 
 const DayPage = ({ params }: { params: { day: string } }) => {
+  const { prevRecord } = useHomeContext();
   const [user] = useAuthState(auth);
   const router = useRouter();
   const [exercise, setExercise] = useState<ExerciseType[]>([]);

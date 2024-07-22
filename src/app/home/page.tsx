@@ -24,7 +24,13 @@ const HomePage = () => {
     return unsubscribe;
   }, [router]);
 
-  if (!user) return <div>Loading...</div>;
+  if (!user)
+    return (
+      <div className="w-screen h-screen grid place-content-center">
+        <span>Loading</span>
+        <span className="loading loading-dots loading-lg"></span>
+      </div>
+    );
   return (
     <div className=" p-2 space-y-3 bg-[#35524A]">
       <Header user={user} />

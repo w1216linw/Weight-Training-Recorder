@@ -4,7 +4,7 @@ import { User as FirebaseUser } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import Chart from "./chart";
-import LoadingChart from "./loading-chart";
+import LoadingChart from "./chartLoading";
 
 export type CompoundMovement =
   | "bench press"

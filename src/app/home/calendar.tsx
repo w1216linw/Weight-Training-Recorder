@@ -1,12 +1,13 @@
 import { db } from "@/lib/firebase";
-import { classes, generateDate, getDate } from "@/lib/utils";
+import { classes, generateDate, getDate, getLatestRecord } from "@/lib/utils";
 import dayjs from "dayjs";
 import { User as FirebaseUser } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import Link from "next/link";
 import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FaGreaterThan, FaLessThan } from "react-icons/fa6";
+import { useHomeContext } from "./homeContext";
 
 const week = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -34,12 +35,17 @@ const getBgColor = (
 };
 
 const Calendar = ({ user }: { user: FirebaseUser }) => {
+  const {
+    recordStack,
+    setRecordStack,
+    prevRecord,
+    setPrevRecord,
+    exercise,
+    setExercise,
+  } = useHomeContext();
   const searchParam = useSearchParams();
-  const [exercise, setExercise] =
-    useState<Record<string, { isExercise: boolean; tag: string }>>();
-  const dates = generateDate(
-    Number(searchParam.get("month")) || dayjs().month()
-  );
+
+  const dates = generateDate(getMonth(searchParam));
   const fetchExercises = async () => {
     const month = getMonth(searchParam);
     const docRef = doc(
@@ -53,8 +59,15 @@ const Calendar = ({ user }: { user: FirebaseUser }) => {
     if (!docSnap.exists()) {
       await setDoc(docRef, {});
     } else {
-      const data = docSnap.data();
-      setExercise(data);
+      const key = getMonth(searchParam);
+      if (!recordStack.includes(key)) {
+        const data = docSnap.data();
+        setExercise({ ...exercise, ...data });
+        setRecordStack([...recordStack, key]);
+        if (key === dayjs().month() && Object.entries(prevRecord).length < 1) {
+          setPrevRecord(getLatestRecord(data));
+        }
+      }
     }
   };
 
