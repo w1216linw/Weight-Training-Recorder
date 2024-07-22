@@ -1,4 +1,6 @@
+import { PrevRecord } from "@/app/home/homeContext";
 import dayjs from "dayjs";
+import { DocumentData } from "firebase/firestore";
 import { Dispatch, SetStateAction } from "react";
 import { encrypt } from "./jwt";
 
@@ -87,4 +89,19 @@ export const objToArray = <T>(
       [title]: key,
       ...value,
     })) as T[];
+};
+
+export const getLatestRecord = (data: DocumentData) => {
+  const latestRecord: PrevRecord = {};
+  for (const date in data) {
+    const { tag, isExercise } = data[date];
+
+    if (isExercise) {
+      if (!latestRecord[tag] || new Date(date) > new Date(latestRecord[tag])) {
+        latestRecord[tag] = date;
+      }
+    }
+  }
+
+  return latestRecord;
 };

@@ -1,4 +1,4 @@
-const DayLoading = () => {
+const Loading = () => {
   return (
     <div className="w-screen h-screen grid place-items-center">
       <span className="loading loading-ring loading-lg"></span>
@@ -6,4 +6,4 @@ const DayLoading = () => {
   );
 };
 
-export default DayLoading;
+export default Loading;
