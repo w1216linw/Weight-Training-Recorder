@@ -19,8 +19,11 @@ export type ExerciseType = {
   reps: string;
 };
 
+type ExerciseSet = ExerciseType[];
+
 const DayPage = ({ params }: { params: { day: string } }) => {
   const { prevRecord } = useHomeContext();
+  const [prevExercise, setPrevExercise] = useState<ExerciseSet>();
   const [user] = useAuthState(auth);
   const router = useRouter();
   const [exercise, setExercise] = useState<ExerciseType[]>([]);
@@ -93,10 +96,22 @@ const DayPage = ({ params }: { params: { day: string } }) => {
         "month",
         dayjs(params.day).format("MM-YYYY")
       );
-      const docSnap = (await getDoc(userRef)).get(params.day);
-      await updateDoc(userRef, {
-        [params.day]: { ...docSnap, isExercise },
-      });
+      const docSnap = await getDoc(userRef);
+      return docSnap.exists() ? docSnap.get(params.day) : {};
+    } else {
+      return {};
+    }
+  };
+
+  const fetchPrevExercise = async () => {
+    if (user) {
+      const userRef = doc(db, user.uid, "exercise", "detail", prevRecord[tag]);
+      const docSnap = (await getDoc(userRef)).data();
+      if (docSnap) {
+        // !!!!!!
+
+        setPrevExercise(objToArray("name", docSnap));
+      }
     }
   };
 
@@ -108,7 +123,6 @@ const DayPage = ({ params }: { params: { day: string } }) => {
     });
     fetchDetail();
   }, []);
-
   // debounce for updating isExercise
   useEffect(() => {
     setMounted(true);
@@ -123,6 +137,11 @@ const DayPage = ({ params }: { params: { day: string } }) => {
       return () => clearTimeout(timer);
     }
   }, [delay]);
+
+  useEffect(() => {
+    if (!tag) return;
+    fetchPrevExercise();
+  }, [tag]);
 
   return (
     <div className="p-2 space-y-3 ">
@@ -169,6 +188,27 @@ const DayPage = ({ params }: { params: { day: string } }) => {
         {user && (
           <Exercise user={user} date={params.day} fetchDetail={fetchDetail} />
         )}
+      </div>
+      <div className="w-full border overflow-hidden p-1">
+        <div className="flex gap-2 overflow-scroll">
+          {prevExercise &&
+            prevExercise.length > 1 &&
+            prevExercise.map((item) => (
+              <div className="aspect-video bg-white rounded-md min-w-28 p-2 flex flex-col justify-between">
+                <p className="capitalize text-wrap">{item.name}</p>
+                <div className="text-xs flex justify-between">
+                  <p>
+                    {item.weight}/{item.reps}/{item.sets}
+                  </p>
+                  <p>
+                    {Number(item.reps) *
+                      Number(item.sets) *
+                      Number(item.weight)}
+                  </p>
+                </div>
+              </div>
+            ))}
+        </div>
       </div>
       <div>
         {exercise.length > 0 &&
