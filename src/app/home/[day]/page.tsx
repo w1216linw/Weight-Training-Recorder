@@ -194,7 +194,10 @@ const DayPage = ({ params }: { params: { day: string } }) => {
           <p className="pb-1">Previous Exercise</p>
           <div className="flex gap-2 overflow-x-scroll">
             {prevExercise.map((item) => (
-              <div className="aspect-video bg-white rounded-md min-w-28 p-2 flex flex-col justify-between">
+              <div
+                key={item.name}
+                className="aspect-video bg-white rounded-md min-w-28 p-2 flex flex-col justify-between"
+              >
                 <p className="capitalize text-wrap">{item.name}</p>
                 <div className="text-xs flex justify-between">
                   <p>
