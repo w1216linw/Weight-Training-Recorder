@@ -189,11 +189,11 @@ const DayPage = ({ params }: { params: { day: string } }) => {
           <Exercise user={user} date={params.day} fetchDetail={fetchDetail} />
         )}
       </div>
-      <div className="w-full border overflow-hidden p-1">
-        <div className="flex gap-2 overflow-scroll">
-          {prevExercise &&
-            prevExercise.length > 1 &&
-            prevExercise.map((item) => (
+      {prevExercise && prevExercise.length > 1 && (
+        <div className="w-full border overflow-hidden p-2 shadow-sm rounded-md">
+          <p className="pb-1">Previous Exercise</p>
+          <div className="flex gap-2 overflow-x-scroll">
+            {prevExercise.map((item) => (
               <div className="aspect-video bg-white rounded-md min-w-28 p-2 flex flex-col justify-between">
                 <p className="capitalize text-wrap">{item.name}</p>
                 <div className="text-xs flex justify-between">
@@ -208,8 +208,9 @@ const DayPage = ({ params }: { params: { day: string } }) => {
                 </div>
               </div>
             ))}
+          </div>
         </div>
-      </div>
+      )}
       <div>
         {exercise.length > 0 &&
           exercise.map((elem) => (
