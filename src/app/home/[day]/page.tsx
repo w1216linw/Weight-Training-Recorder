@@ -96,10 +96,12 @@ const DayPage = ({ params }: { params: { day: string } }) => {
         "month",
         dayjs(params.day).format("MM-YYYY")
       );
-      const docSnap = await getDoc(userRef);
-      return docSnap.exists() ? docSnap.get(params.day) : {};
+      const docSnap = (await getDoc(userRef)).get(params.day);
+      await updateDoc(userRef, {
+        [params.day]: { ...docSnap, isExercise },
+      });
     } else {
-      return {};
+      return;
     }
   };
 
@@ -108,12 +110,16 @@ const DayPage = ({ params }: { params: { day: string } }) => {
       const userRef = doc(db, user.uid, "exercise", "detail", prevRecord[tag]);
       const docSnap = (await getDoc(userRef)).data();
       if (docSnap) {
-        // !!!!!!
-
         setPrevExercise(objToArray("name", docSnap));
       }
     }
   };
+
+  useEffect(() => {
+    if (!user) {
+      router.push("/home");
+    }
+  }, []);
 
   // initial the details and isExercise
   useEffect(() => {
@@ -123,11 +129,13 @@ const DayPage = ({ params }: { params: { day: string } }) => {
     });
     fetchDetail();
   }, []);
+
   // debounce for updating isExercise
   useEffect(() => {
     setMounted(true);
     return () => setMounted(false);
   }, []);
+
   useEffect(() => {
     if (mounted) {
       const timer = setTimeout(() => {
