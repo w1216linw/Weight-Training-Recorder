@@ -167,7 +167,11 @@ const Exercise = ({
           <FaPlus />
         </button>
       </div>
-      {error !== "" && <div className="flex">{error}</div>}
+      {error !== "" && (
+        <div className="flex py-2 bg-red-200 justify-center rounded-md my-1">
+          {error}
+        </div>
+      )}
     </div>
   );
 };

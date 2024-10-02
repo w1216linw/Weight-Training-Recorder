@@ -46,6 +46,7 @@ const Calendar = ({ user }: { user: FirebaseUser }) => {
   const searchParam = useSearchParams();
 
   const dates = generateDate(getMonth(searchParam));
+
   const fetchExercises = async () => {
     const month = getMonth(searchParam);
     const docRef = doc(
