@@ -80,7 +80,7 @@ const CompoundTraining = ({ user }: { user: FirebaseUser }) => {
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: -10, opacity: 0 }}
                 initial={{ x: 10, opacity: 0 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.2 }}
                 className="flex gap-2 p-2"
               >
                 <h1>PR:</h1>
