@@ -2,6 +2,7 @@ import { db } from "@/lib/firebase";
 import { classes, objToArray } from "@/lib/utils";
 import { User as FirebaseUser } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
+import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import Chart from "./chart";
 import LoadingChart from "./chartLoading";
@@ -69,8 +70,9 @@ const CompoundTraining = ({ user }: { user: FirebaseUser }) => {
 
   useEffect(() => {
     if (!(active in process)) fetchProcess();
-    else return;
   }, [active]);
+
+  console.log(active);
 
   return (
     <div className="mb-2 p-2 bg-neutral-100 rounded-md w-full">
@@ -94,14 +96,26 @@ const CompoundTraining = ({ user }: { user: FirebaseUser }) => {
         <LoadingChart />
       ) : (
         <>
-          {active in process && (
-            <div className="flex gap-2 p-2">
-              <h1>PR:</h1>
-              <p>{process[active]?.pr?.weight} lb</p>
-              <p>{process[active]?.pr?.date}</p>
-            </div>
-          )}
-          <Chart data={objToArray("date", process[active]?.graph)} />
+          <AnimatePresence mode="wait">
+            {active in process && (
+              <motion.div
+                key={`${active}`}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: -10, opacity: 0 }}
+                initial={{ x: 10, opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="flex gap-2 p-2"
+              >
+                <h1>PR:</h1>
+                <p>{process[active]?.pr?.weight} lb</p>
+                <p>{process[active]?.pr?.date}</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <Chart
+            tab={active}
+            data={objToArray("date", process[active]?.graph)}
+          />
         </>
       )}
     </div>
