@@ -58,7 +58,7 @@ const CompoundTrainingTabs = ({
         animate={{
           x: position,
         }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.2 }}
       />
     </div>
   );
