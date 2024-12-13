@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from "motion/react";
 import { Legend, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
 
 type Data = {
@@ -34,7 +35,7 @@ const CustomTooltip = ({ payload, label, active }: any) => {
   return null;
 };
 
-const Chart = ({ data }: { data: Data[] }) => {
+const Chart = ({ data, tab }: { data: Data[]; tab: string }) => {
   const dateVolumeSet = data
     .map((elem) => ({
       volume: getVolume({ ...elem }),
@@ -49,30 +50,39 @@ const Chart = ({ data }: { data: Data[] }) => {
     return <div className="grid place-items-center h-[300px]">no data</div>;
   }
   return (
-    <div className="overflow-x-scroll w-full">
-      <LineChart
-        width={600}
-        height={300}
-        data={dateVolumeSet}
-        margin={{
-          top: 20,
-          right: 30,
-          left: 0,
-          bottom: 5,
-        }}
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={tab}
+        initial={{ x: 10, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        exit={{ x: -10, opacity: 0 }}
+        transition={{ duration: 0.3 }}
+        className="overflow-x-scroll w-full"
       >
-        <XAxis />
-        <YAxis />
-        <Tooltip content={<CustomTooltip />} />
-        <Legend />
-        <Line
-          type="monotone"
-          dataKey="volume"
-          stroke="#8884d8"
-          activeDot={{ r: 8 }}
-        />
-      </LineChart>
-    </div>
+        <LineChart
+          width={600}
+          height={300}
+          data={dateVolumeSet}
+          margin={{
+            top: 20,
+            right: 30,
+            left: 0,
+            bottom: 5,
+          }}
+        >
+          <XAxis />
+          <YAxis />
+          <Tooltip content={<CustomTooltip />} />
+          <Legend />
+          <Line
+            type="monotone"
+            dataKey="volume"
+            stroke="#8884d8"
+            activeDot={{ r: 8 }}
+          />
+        </LineChart>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 
