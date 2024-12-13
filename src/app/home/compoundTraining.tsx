@@ -1,24 +1,18 @@
 import { db } from "@/lib/firebase";
-import { classes, objToArray } from "@/lib/utils";
+import { objToArray } from "@/lib/utils";
 import { User as FirebaseUser } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import Chart from "./chart";
 import LoadingChart from "./chartLoading";
+import CompoundTrainingTabs from "./compoundTrainingTabs";
 
 export type CompoundMovement =
   | "bench press"
   | "squat"
   | "deadlift"
   | "press push";
-
-const compoundMovement: CompoundMovement[] = [
-  "bench press",
-  "press push",
-  "deadlift",
-  "squat",
-];
 
 type Weight = {
   weight: string;
@@ -70,28 +64,11 @@ const CompoundTraining = ({ user }: { user: FirebaseUser }) => {
 
   useEffect(() => {
     if (!(active in process)) fetchProcess();
-  }, [active]);
-
-  console.log(active);
+  }, [active, fetchProcess]);
 
   return (
     <div className="mb-2 p-2 bg-neutral-100 rounded-md w-full">
-      <div className="flex justify-between">
-        {compoundMovement.map((elem, index) => (
-          <button
-            key={index}
-            className={classes(
-              active === elem ? "shadow-inner shadow-gray-400" : "",
-              "py-1 px-2 rounded-md capitalize hover:outline-1"
-            )}
-            onClick={() => {
-              setActive(elem);
-            }}
-          >
-            {elem}
-          </button>
-        ))}
-      </div>
+      <CompoundTrainingTabs setActive={setActive} active={active} />
       {loading ? (
         <LoadingChart />
       ) : (
