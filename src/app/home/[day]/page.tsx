@@ -2,6 +2,7 @@
 
 import { auth, db } from "@/lib/firebase";
 import { classes, objToArray } from "@/lib/utils";
+
 import dayjs from "dayjs";
 import { deleteField, doc, getDoc, updateDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
@@ -9,8 +10,8 @@ import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { FaLessThan } from "react-icons/fa";
 import { FiDelete } from "react-icons/fi";
-import { useHomeContext } from "../homeContext";
-import Exercise from "./exercise";
+import { useHomeContext } from "../components/homeContext";
+import Exercise from "./components/exercise";
 
 export type ExerciseType = {
   name: string;

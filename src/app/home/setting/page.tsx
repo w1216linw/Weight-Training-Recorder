@@ -3,7 +3,7 @@ import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { FaLessThan } from "react-icons/fa6";
-import Avatar from "./select-avatar";
+import Avatar from "./components/select-avatar";
 
 const SettingPage = () => {
   const router = useRouter();

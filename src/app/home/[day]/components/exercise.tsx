@@ -4,7 +4,7 @@ import { User as FirebaseUser } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
-import { type ExerciseType } from "./page";
+import { ExerciseType } from "../page";
 
 const Exercise = ({
   user,

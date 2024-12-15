@@ -1,6 +1,7 @@
-import { PrevRecord } from "@/app/home/homeContext";
+import { PrevRecord } from "@/app/home/components/homeContext";
 import dayjs from "dayjs";
 import { DocumentData } from "firebase/firestore";
+import { ReadonlyURLSearchParams } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 import { encrypt } from "./jwt";
 
@@ -105,3 +106,7 @@ export const getLatestRecord = (data: DocumentData) => {
 
   return latestRecord;
 };
+
+export function getSearchParamsMonth(searchParam: ReadonlyURLSearchParams) {
+  return Number(searchParam.get("month")) || dayjs().month();
+}
