@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import HomeContext, { ExerciseRecord, PrevRecord } from "./homeContext";
+import HomeContext, {
+  ExerciseRecord,
+  PrevRecord,
+} from "./components/homeContext";
 
 export default function HomeLayout({
   children,

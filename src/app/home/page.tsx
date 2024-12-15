@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IoIosSettings } from "react-icons/io";
-import Dashboard from "./dashboard";
-import Header from "./header";
+import Dashboard from "./components/dashboard";
+import Header from "./components/header";
 
 const HomePage = () => {
   const [user, setUser] = useState<FirebaseUser>();

@@ -38,8 +38,11 @@ const CompoundTrainingTabs = ({
   return (
     <div className={`flex relative my-1`} ref={tabsRef}>
       {compoundMovement.map((elem, index) => (
-        <button
+        <motion.button
           key={elem}
+          whileTap={{
+            scale: 0.9,
+          }}
           className="w-full py-1 px-2 rounded-md capitalize hover:outline-1"
           onClick={() => {
             setActive(elem);
@@ -47,7 +50,7 @@ const CompoundTrainingTabs = ({
           }}
         >
           {elem}
-        </button>
+        </motion.button>
       ))}
       <motion.div
         className="
