@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "motion/react";
-import { Legend, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
+import { Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
 
 type Data = {
   date: string;
@@ -66,14 +66,26 @@ const Chart = ({ data, tab }: { data: Data[]; tab: string }) => {
           margin={{
             top: 20,
             right: 30,
-            left: 0,
+            left: 10,
             bottom: 5,
           }}
         >
-          <XAxis />
-          <YAxis />
+          <XAxis
+            label={{
+              value: "nth",
+              position: "insideBottom",
+              offset: "0",
+            }}
+          />
+          <YAxis
+            label={{
+              value: "volume",
+              position: "insideLeft",
+              angle: "-90",
+              offset: "0",
+            }}
+          />
           <Tooltip content={<CustomTooltip />} />
-          <Legend />
           <Line
             type="monotone"
             dataKey="volume"
