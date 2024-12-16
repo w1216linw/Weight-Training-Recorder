@@ -4,41 +4,46 @@ import dayjs from "dayjs";
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 import { FaGreaterThan, FaLessThan } from "react-icons/fa6";
 
 const MotionLink = motion.create(Link);
 const MonthNavigation = () => {
   const searchParam = useSearchParams();
   const month = getSearchParamsMonth(searchParam);
+  const [direction, setDirection] = useState<"left" | "right">("left");
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={month}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.2 }}
-        className="relative flex justify-between items-center"
+    <div className="relative flex justify-between items-center">
+      <MotionLink
+        whileTap={{ scale: 0.9 }}
+        whileHover={{ scale: 1.1 }}
+        href={`/home?month=${month - 1}`}
+        onClick={() => setDirection("left")}
       >
-        <MotionLink
-          whileTap={{ scale: 0.9 }}
-          whileHover={{ scale: 1.1 }}
-          href={`/home?month=${month - 1}`}
+        <FaLessThan />
+      </MotionLink>
+
+      <AnimatePresence mode="wait">
+        <motion.h1
+          key={month}
+          initial={{ opacity: 0.3, x: direction === "left" ? 30 : -30 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0.3, x: direction === "left" ? -20 : 20 }}
+          transition={{ duration: 0.2 }}
+          className="font-bold text-xl"
         >
-          <FaLessThan />
-        </MotionLink>
-        <h1 className="font-bold text-xl">
           {!!month ? dayjs().month(month).format("MMMM") : getDate("MMMM")}
-        </h1>
-        <MotionLink
-          whileTap={{ scale: 0.9 }}
-          whileHover={{ scale: 1.1 }}
-          href={`/home?month=${month + 1}`}
-        >
-          <FaGreaterThan />
-        </MotionLink>
-      </motion.div>
-    </AnimatePresence>
+        </motion.h1>
+      </AnimatePresence>
+      <MotionLink
+        onClick={() => setDirection("right")}
+        whileTap={{ scale: 0.9 }}
+        whileHover={{ scale: 1.1 }}
+        href={`/home?month=${month + 1}`}
+      >
+        <FaGreaterThan />
+      </MotionLink>
+    </div>
   );
 };
 
