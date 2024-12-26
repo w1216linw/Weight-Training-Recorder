@@ -1,7 +1,7 @@
 import { classes, generateDate } from "@/lib/utils";
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
-import { useHomeContext } from "./homeContext";
+import { useHomeContext } from "../../contexts/homeContext";
 
 const getBgColor = (
   todayAndExercise: boolean,

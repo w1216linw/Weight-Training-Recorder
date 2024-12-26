@@ -1,16 +1,16 @@
 "use client";
 
-import { auth, db } from "@/lib/firebase";
+import { db } from "@/lib/firebase";
 import { classes, objToArray } from "@/lib/utils";
 
+import { useAuthContext } from "@/app/contexts/authContext";
 import dayjs from "dayjs";
 import { deleteField, doc, getDoc, updateDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { FaLessThan } from "react-icons/fa";
 import { FiDelete } from "react-icons/fi";
-import { useHomeContext } from "../components/homeContext";
+import { useHomeContext } from "../../contexts/homeContext";
 import Exercise from "./components/exercise";
 
 export type ExerciseType = {
@@ -23,9 +23,9 @@ export type ExerciseType = {
 type ExerciseSet = ExerciseType[];
 
 const DayPage = ({ params }: { params: { day: string } }) => {
+  const { user } = useAuthContext();
   const { prevRecord } = useHomeContext();
   const [prevExercise, setPrevExercise] = useState<ExerciseSet>();
-  const [user] = useAuthState(auth);
   const router = useRouter();
   const [exercise, setExercise] = useState<ExerciseType[]>([]);
   const [isExercise, setIsExercise] = useState(false);
