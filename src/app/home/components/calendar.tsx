@@ -5,8 +5,8 @@ import { User as FirebaseUser } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
+import { useHomeContext } from "../../contexts/homeContext";
 import Days from "./calendarDays";
-import { useHomeContext } from "./homeContext";
 import MonthNavigation from "./monthNavigation";
 
 const Week = () => {

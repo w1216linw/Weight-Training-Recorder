@@ -1,4 +1,4 @@
-import { PrevRecord } from "@/app/home/components/homeContext";
+import { PrevRecord } from "@/app/contexts/homeContext";
 import dayjs from "dayjs";
 import { DocumentData } from "firebase/firestore";
 import { ReadonlyURLSearchParams } from "next/navigation";
