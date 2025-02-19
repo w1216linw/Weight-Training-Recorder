@@ -6,7 +6,7 @@ import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { ExerciseType } from "../page";
 
-const Exercise = ({
+const NewExercise = ({
   user,
   date,
   fetchDetail,
@@ -176,4 +176,4 @@ const Exercise = ({
   );
 };
 
-export default Exercise;
+export default NewExercise;
