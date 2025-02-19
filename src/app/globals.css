@@ -21,3 +21,19 @@ body {
 .h-close {
   height: 2rem;
 }
+
+.ray {
+  position: absolute;
+  width: 2px;
+  background-color: #fdba74;
+  translate: 0 5px;
+  border-radius: 2px;
+}
+
+.ray[data-side="side"] {
+  height: 8px;
+}
+
+.ray[data-side="center"] {
+  height: 6px;
+}
