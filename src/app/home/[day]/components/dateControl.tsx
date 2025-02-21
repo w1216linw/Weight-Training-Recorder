@@ -86,6 +86,7 @@ const DateControl = ({ params }: { params: { day: string } }) => {
           selectedTag={tag}
           lighted={isExercise}
           updateIsExercise={handleClick}
+          setSelectedTag={setTag}
         />
       </div>
       <PrevExercise user={user} tag={tag} />
