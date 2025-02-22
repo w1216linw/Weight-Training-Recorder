@@ -52,14 +52,17 @@ const TagContextMenu: React.FC<TagContextMenuProps> = ({
         close();
       }}
       onClick={(e) => e.stopPropagation()}
-      className="fixed w-[120px] h-max bg-black text-white p-2 rounded-md shadow-lg"
+      className="fixed w-[120px] h-max flex flex-col items-center bg-black text-white py-2 rounded-md shadow-lg"
       style={{
         top: `max(0px, min(${y}px, calc(100vh - 80px)))`,
         left: `max(0px, min(${x}px, calc(100vw - 120px)))`,
       }}
     >
       <motion.button
-        whileHover={{ background: "white", color: "black" }}
+        className="w-full text-white  uppercase"
+        whileHover={{ background: "white", color: "black", width: "100%" }}
+        initial={{ background: "black", color: "white" }}
+        transition={{ duration: 0.2 }}
         onClick={() => {
           fc();
           close();
