@@ -5,34 +5,42 @@ import { objToArray } from "@/lib/utils";
 
 import { useAuthContext } from "@/app/contexts/authContext";
 import { deleteField, doc, getDoc, updateDoc } from "firebase/firestore";
+import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { FiDelete } from "react-icons/fi";
-import { useHomeContext } from "../../contexts/homeContext";
+import { useEffect, useRef, useState } from "react";
 import BackBtn from "./components/backBtn";
 import DateControl from "./components/dateControl";
 import NewExercise from "./components/newExercise";
+import WorkoutInfo from "./components/workoutInfo";
 
-export type ExerciseType = {
+type WorkoutInfoProps = {
   name: string;
+  type: "training" | "cardio";
+};
+
+export type TrainingType = WorkoutInfoProps & {
   weight: string;
   sets: string;
   reps: string;
 };
 
+export type CardioType = WorkoutInfoProps & {
+  duration: string;
+};
+
 const DayPage = ({ params }: { params: { day: string } }) => {
   const { user } = useAuthContext();
-  const { prevRecord } = useHomeContext();
 
   const router = useRouter();
-  const [exercise, setExercise] = useState<ExerciseType[]>([]);
+  const [exercise, setExercise] = useState<(CardioType | TrainingType)[]>([]);
+  const constraintsRef = useRef<HTMLDivElement>(null);
 
   const fetchDetail = async () => {
     if (user) {
       const userRef = doc(db, user.uid, "exercise", "detail", params.day);
       const docSnap = await getDoc(userRef);
 
-      setExercise(objToArray<ExerciseType>("name", docSnap.data()));
+      setExercise(objToArray<TrainingType>("name", docSnap.data()));
     }
   };
 
@@ -58,49 +66,23 @@ const DayPage = ({ params }: { params: { day: string } }) => {
   }, []);
 
   return (
-    <div className="p-2 space-y-3">
+    <motion.div className="p-2 space-y-3" ref={constraintsRef}>
       <BackBtn />
       <DateControl params={params} />
-      {user && (
-        <NewExercise user={user} date={params.day} fetchDetail={fetchDetail} />
-      )}
 
+      {user && (
+        <NewExercise
+          user={user}
+          date={params.day}
+          fetchDetail={fetchDetail}
+          dragConstraintsRef={constraintsRef}
+        />
+      )}
       <div>
         {exercise.length > 0 &&
-          exercise.map((elem) => (
-            <div
-              key={elem.name}
-              className="my-4 p-4 border rounded shadow-md flex justify-between"
-            >
-              <div className="flex-1 ">
-                <div className="flex justify-between items-center">
-                  <h1 className="text-lg font-bold mb-2 capitalize">
-                    {elem.name}
-                  </h1>
-                  <p className="text-gray-500">
-                    {`V: ${
-                      Number(elem.weight) *
-                      Number(elem.reps) *
-                      Number(elem.sets)
-                    }`}
-                  </p>
-                </div>
-                <div className="flex justify-between">
-                  <p className="text-gray-700">Weight: {elem.weight}</p>
-                  <p className="text-gray-700">Reps: {elem.reps}</p>
-                  <p className="text-gray-700">Sets: {elem.sets}</p>
-                </div>
-              </div>
-              <button
-                className="w-10 flex items-center justify-end"
-                onClick={() => deleteExercise(elem.name)}
-              >
-                <FiDelete size={18} className="text-red-400" />
-              </button>
-            </div>
-          ))}
+          exercise.map((elem) => WorkoutInfo({ info: elem, deleteExercise }))}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
