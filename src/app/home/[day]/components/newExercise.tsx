@@ -1,28 +1,40 @@
+import Modal from "@/app/components/modal";
 import { db } from "@/lib/firebase";
 import { handleError } from "@/lib/utils";
 import { User as FirebaseUser } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { motion } from "motion/react";
 import { useState } from "react";
-import { FaPlus } from "react-icons/fa";
-import { ExerciseType } from "../page";
+import { FaPlus } from "react-icons/fa6";
+import { TrainingType } from "../page";
 
-const NewExercise = ({
-  user,
-  date,
-  fetchDetail,
-}: {
+type NewExerciseProps = {
   user: FirebaseUser;
   date: string;
   fetchDetail: () => void;
+  dragConstraintsRef: React.RefObject<HTMLDivElement>;
+};
+
+const NewExercise: React.FC<NewExerciseProps> = ({
+  user,
+  date,
+  fetchDetail,
+  dragConstraintsRef,
 }) => {
-  const [exercise, setExercise] = useState<ExerciseType>({
+  const [showModal, setShowModal] = useState(false);
+  const closeModal = () => {
+    console.log("close");
+    setShowModal(false);
+  };
+  const [exercise, setExercise] = useState<TrainingType>({
+    type: "training",
     name: "",
     weight: "",
     reps: "",
     sets: "",
   });
 
-  const checkMovement = async (exercise: ExerciseType, date: string) => {
+  const checkMovement = async (exercise: TrainingType, date: string) => {
     const formattedName = exercise.name.toLowerCase().trim();
     if (
       ["bench press", "press push", "deadlift", "squat"].includes(formattedName)
@@ -78,6 +90,7 @@ const NewExercise = ({
 
   const resetExercise = () => {
     setExercise({
+      type: "training",
       name: "",
       weight: "",
       reps: "",
@@ -113,8 +126,16 @@ const NewExercise = ({
   };
 
   return (
-    <div>
-      <div className="flex gap-2">
+    <div className="border">
+      <motion.button
+        onClick={() => setShowModal(true)}
+        drag
+        dragConstraints={dragConstraintsRef}
+        className="w-8 h-8 rounded-lg bg-green-300 hover:bg-green-500 flex justify-center items-center"
+      >
+        <FaPlus className="text-white text-xl" />
+      </motion.button>
+      <Modal showModal={showModal} closeModal={closeModal}>
         <div className="flex-1">
           <div className="mb-2">
             <input
@@ -159,19 +180,17 @@ const NewExercise = ({
               className="px-4 py-2 w-1/2 rounded-md border border-gray-300"
             />
           </div>
+          <div>
+            <button onClick={closeModal}>cancel</button>
+          </div>
         </div>
-        <button
-          onClick={update}
-          className="text-neutral-50 text-2xl px-2 bg-green-300 rounded-md hover:bg-green-500"
-        >
-          <FaPlus />
-        </button>
-      </div>
-      {error !== "" && (
-        <div className="flex py-2 bg-red-200 justify-center rounded-md my-1">
-          {error}
-        </div>
-      )}
+
+        {error !== "" && (
+          <div className="flex py-2 bg-red-200 justify-center rounded-md my-1">
+            {error}
+          </div>
+        )}
+      </Modal>
     </div>
   );
 };

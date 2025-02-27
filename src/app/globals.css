@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+input,
+textarea,
+select {
+  font-size: 16px;
+}
+
 body {
   @apply bg-base-100 text-sm text-primary-content font-sans font-semibold flex flex-col items-center;
   padding: 0;
