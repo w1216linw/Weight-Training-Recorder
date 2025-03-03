@@ -11,10 +11,7 @@ type ExerciseSet = (TrainingType | CardioType)[];
 
 const PrevCardioExercise = ({ item }: { item: CardioType }) => {
   return (
-    <div
-      key={item.name}
-      className="aspect-video bg-white rounded-md min-w-28 p-2 flex flex-col justify-between"
-    >
+    <div className="aspect-video bg-white rounded-md min-w-28 p-2 flex flex-col justify-between">
       <div>
         <p className="capitalize text-wrap">{item.name}</p>
         <p className="text-xs text-gray-500">
@@ -35,10 +32,7 @@ const PrevCardioExercise = ({ item }: { item: CardioType }) => {
 
 const PrevTrainingExercise = ({ item }: { item: TrainingType }) => {
   return (
-    <div
-      key={item.name}
-      className="aspect-video bg-white rounded-md min-w-28 p-2 flex flex-col justify-between"
-    >
+    <div className="aspect-video bg-white rounded-md min-w-28 p-2 flex flex-col justify-between">
       <p className="capitalize text-wrap">{item.name}</p>
       <div className="flex justify-between items-end">
         <p>
@@ -86,11 +80,11 @@ const PrevExercise = ({
         <div className="w-full border overflow-hidden p-2 shadow-sm rounded-md">
           <p className="pb-1">Previous Exercise</p>
           <div className="flex gap-2 overflow-x-scroll">
-            {prevExercise.map((item) =>
+            {prevExercise.map((item, index) =>
               isCardio(item) ? (
-                <PrevCardioExercise item={item} />
+                <PrevCardioExercise key={index} item={item} />
               ) : (
-                <PrevTrainingExercise item={item} />
+                <PrevTrainingExercise key={index} item={item} />
               )
             )}
           </div>
