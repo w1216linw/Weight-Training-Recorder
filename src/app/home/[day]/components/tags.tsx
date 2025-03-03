@@ -1,3 +1,4 @@
+import Modal from "@/app/components/modal";
 import { db } from "@/lib/firebase";
 import dayjs from "dayjs";
 import { User } from "firebase/auth";
@@ -5,6 +6,7 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { AnimatePresence, motion } from "motion/react";
 import React, { useState } from "react";
 import { BsLightningCharge } from "react-icons/bs";
+import { FaRunning } from "react-icons/fa";
 import LightBulb from "./lightbulb";
 
 interface TagsProps {
@@ -18,15 +20,17 @@ interface TagsProps {
 }
 
 // The radius for positioning tags in a circular layout
-const RADIUS: number = 50;
-// The multiplier for the angle between tags
-const SPACING: number = 1.2;
+const RADIUS: number = 60;
 // Calculate the position of a tag in a circular layout
 const calculatePosition = (index: number, totalTags: number) => {
-  const angle = -10 + (90 / (totalTags - 1)) * index * SPACING;
-  const angleInRadius = (angle * Math.PI) / 180;
-  const x = RADIUS * Math.cos(angleInRadius);
-  const y = RADIUS * Math.sin(angleInRadius) - 10;
+  const adjustedRadius = RADIUS + (totalTags < 5 ? 0 : totalTags - 5) * 3;
+  const startAngle = 0;
+  const endAngle = startAngle + 360;
+  const angleStep = (endAngle - startAngle) / (totalTags - 1);
+  const angle = startAngle + index * angleStep;
+  const angleInRadius = (angle * Math.PI) / 360;
+  const x = adjustedRadius * Math.cos(angleInRadius);
+  const y = adjustedRadius * Math.sin(angleInRadius);
   return { x, y };
 };
 type TagContextMenuProps = {
@@ -116,71 +120,83 @@ const Tags: React.FC<TagsProps> = ({
 
   return (
     <div className="relative">
-      <motion.button
-        className="w-8 grid place-content-center"
-        onClick={handleShowTags}
-      >
-        <div className="grid place-content-center">
-          <div className="flex">
-            <LightBulb lighted={lighted} />
-          </div>
-        </div>
-      </motion.button>
       <AnimatePresence mode="wait">
-        {showTags &&
-          tags.map((tag, index) => {
-            if (tag === "switch") {
-              return (
-                <motion.span
-                  onClick={() => updateIsExercise && updateIsExercise()}
-                  whileHover={{ scale: 1.2 }}
-                  className="absolute text-lg"
-                  style={{
-                    top: `${RADIUS}px`,
-                    left: `${RADIUS + 10}px`,
-                  }}
-                  role="button"
-                  aria-label="toggle exercise sign"
-                  tabIndex={0}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.2 }}
-                  key={tag}
-                  exit={{ opacity: 0 }}
-                >
-                  <BsLightningCharge />
-                </motion.span>
-              );
-            }
-            const { x, y } = calculatePosition(index, tags.length - 1);
-            return (
-              <motion.span
-                onContextMenu={handleContextMenu}
-                role="button"
-                aria-label="tag for body part or exercise group"
-                tabIndex={0}
-                onClick={() => handleSaveTag(tag.toUpperCase())}
-                whileHover={{ border: "solid" }}
-                key={tag}
-                transition={{ duration: 0.2 }}
-                initial={{ top: 0, left: 0, border: "dashed" }}
-                animate={{
-                  top: `${y}px`,
-                  left: `${x}px`,
-                  opacity: 1,
-                }}
-                exit={{ top: "0px", left: "0px", opacity: 0 }}
-                className="absolute w-7 aspect-square grid place-content-center rounded-full text-xs capitalize"
-                style={{
-                  borderColor:
-                    tag.toUpperCase() === selectedTag ? "#fdba74" : "#000",
-                  color: tag.toUpperCase() === selectedTag ? "#fdba74" : "#000",
-                }}
-              >
-                {tag}
-              </motion.span>
-            );
-          })}
+        {!showTags && (
+          <motion.button
+            className="w-8 grid place-content-center absolute bottom-0 left-0 translate-y-1/2"
+            exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.2 }}
+            onClick={handleShowTags}
+          >
+            <div className="grid place-content-center">
+              <div className="flex">
+                <LightBulb lighted={lighted} />
+              </div>
+            </div>
+          </motion.button>
+        )}
       </AnimatePresence>
+      <Modal showModal={showTags} closeModal={handleShowTags} size="md">
+        <div className="h-64 grid place-items-center grid-rows-3">
+          <motion.div onClick={handleShowTags} className="relative row-span-2">
+            <button className="scale-[3]">
+              <LightBulb lighted={lighted} />
+            </button>
+            <AnimatePresence mode="wait">
+              {showTags &&
+                tags.map((tag, index) => {
+                  const { x, y } = calculatePosition(index, tags.length);
+                  return (
+                    <motion.span
+                      onContextMenu={handleContextMenu}
+                      role="button"
+                      aria-label="tag for body part or exercise group"
+                      tabIndex={0}
+                      onClick={() => handleSaveTag(tag.toUpperCase())}
+                      whileHover={{ border: "solid", scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      key={tag}
+                      transition={{ duration: 0.2 }}
+                      initial={{ top: 0, left: 0, border: "dashed" }}
+                      animate={{
+                        top: `${y}px`,
+                        left: `${x - 4}px`,
+                        opacity: 1,
+                      }}
+                      exit={{ top: "0px", left: "0px", opacity: 0 }}
+                      className="absolute w-8 aspect-square grid place-content-center rounded-full capitalize"
+                      style={{
+                        borderColor:
+                          tag.toUpperCase() === selectedTag
+                            ? "#fdba74"
+                            : "#000",
+                        color:
+                          tag.toUpperCase() === selectedTag
+                            ? "#fdba74"
+                            : "#000",
+                      }}
+                    >
+                      {tag === "cardio" ? <FaRunning size={16} /> : tag}
+                    </motion.span>
+                  );
+                })}
+            </AnimatePresence>
+          </motion.div>
+          <motion.button
+            onClick={() => updateIsExercise && updateIsExercise()}
+            role="button"
+            aria-label="toggle exercise sign"
+            tabIndex={0}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            className="bg-gray-200 rounded-md shadow-md text-2xl px-6 py-2"
+          >
+            <BsLightningCharge />
+          </motion.button>
+        </div>
+      </Modal>
       {contextMenu.open && (
         <TagContextMenu
           {...contextMenu}
