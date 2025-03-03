@@ -1,12 +1,16 @@
 import Modal from "@/app/components/modal";
 import { db } from "@/lib/firebase";
-import { handleError } from "@/lib/utils";
+import { classes, handleError } from "@/lib/utils";
 import { User as FirebaseUser } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa6";
-import { TrainingType } from "../page";
+import { GiRun, GiWeightLiftingUp } from "react-icons/gi";
+import { CardioType, TrainingType } from "../page";
+import { isCardio } from "./workoutInfo";
+
+type ExerciseType = "training" | "cardio";
 
 type NewExerciseProps = {
   user: FirebaseUser;
@@ -15,24 +19,114 @@ type NewExerciseProps = {
   dragConstraintsRef: React.RefObject<HTMLDivElement>;
 };
 
+const trainingState: TrainingType = {
+  type: "training",
+  name: "",
+  weight: "",
+  reps: "",
+  sets: "",
+};
+
+const cardioState: CardioType = {
+  type: "cardio",
+  name: "",
+  duration: "",
+  heartRate: "",
+};
+
+const CardioInput: React.FC<{
+  exercise: CardioType;
+  setExercise: React.Dispatch<React.SetStateAction<CardioType>>;
+}> = ({ exercise, setExercise }) => (
+  <div className="flex gap-2">
+    <input
+      type="text"
+      placeholder="Duration (min)"
+      value={exercise.duration}
+      onChange={(e) => setExercise({ ...exercise, duration: e.target.value })}
+      className="px-4 py-2 w-1/2 rounded-md border border-gray-300"
+    />
+    <input
+      type="text"
+      placeholder="Heart Rate (avg per min)"
+      value={exercise.heartRate}
+      onChange={(e) => setExercise({ ...exercise, heartRate: e.target.value })}
+      className="px-4 py-2 w-1/2 rounded-md border border-gray-300"
+    />
+  </div>
+);
+
+const TrainingInput: React.FC<{
+  exercise: TrainingType;
+  setExercise: React.Dispatch<React.SetStateAction<TrainingType>>;
+}> = ({ exercise, setExercise }) => (
+  <div className="flex">
+    <input
+      type="text"
+      placeholder="Weight"
+      value={exercise.weight}
+      onChange={(e) => setExercise({ ...exercise, weight: e.target.value })}
+      className="px-4 py-2 w-1/2 mr-2 rounded-md border border-gray-300"
+    />
+    <input
+      type="text"
+      placeholder="Reps"
+      value={exercise.reps}
+      onChange={(e) => setExercise({ ...exercise, reps: e.target.value })}
+      className="px-4 py-2 w-1/2 mr-2 rounded-md border border-gray-300"
+    />
+    <input
+      type="text"
+      placeholder="Sets"
+      value={exercise.sets}
+      onChange={(e) => setExercise({ ...exercise, sets: e.target.value })}
+      className="px-4 py-2 w-1/2 rounded-md border border-gray-300"
+    />
+  </div>
+);
+
 const NewExercise: React.FC<NewExerciseProps> = ({
   user,
   date,
   fetchDetail,
   dragConstraintsRef,
 }) => {
+  const [isDragging, setIsDragging] = useState(false);
+  const whileDrag = () => {
+    setIsDragging(true);
+  };
+  const endDrag = () => {
+    setIsDragging(false);
+  };
+  const handleModalOpen = () => {
+    if (!isDragging) {
+      setShowModal(true);
+    }
+  };
+  const [exerciseType, setExerciseType] = useState<ExerciseType>("training");
+  const handleToggleExerciseType = () => {
+    setExerciseType((prev) => (prev === "training" ? "cardio" : "training"));
+    setExerciseData(exerciseType === "training" ? cardioState : trainingState);
+  };
+  const [exerciseData, setExerciseData] = useState<TrainingType | CardioType>(
+    trainingState
+  );
+  const isValidData = () => {
+    if (isCardio(exerciseData)) {
+      return exerciseData.name !== "" && exerciseData.duration !== "";
+    } else {
+      return (
+        exerciseData.name !== "" &&
+        exerciseData.weight !== "" &&
+        exerciseData.reps !== "" &&
+        exerciseData.sets !== ""
+      );
+    }
+  };
   const [showModal, setShowModal] = useState(false);
   const closeModal = () => {
-    console.log("close");
     setShowModal(false);
   };
-  const [exercise, setExercise] = useState<TrainingType>({
-    type: "training",
-    name: "",
-    weight: "",
-    reps: "",
-    sets: "",
-  });
 
   const checkMovement = async (exercise: TrainingType, date: string) => {
     const formattedName = exercise.name.toLowerCase().trim();
@@ -89,35 +183,26 @@ const NewExercise: React.FC<NewExerciseProps> = ({
   };
 
   const resetExercise = () => {
-    setExercise({
-      type: "training",
-      name: "",
-      weight: "",
-      reps: "",
-      sets: "",
-    });
+    setExerciseData(exerciseType === "training" ? trainingState : cardioState);
   };
 
   const [error, setError] = useState("");
   const update = async () => {
     try {
-      if (!exercise.name || !exercise.weight || !exercise.sets) {
-        throw new Error("Please fill in all fields");
-      }
       const docRef = doc(db, user.uid, "exercise", "detail", date);
-
+      if (!isValidData()) {
+        throw new Error("Please fill all the fields");
+      }
       await setDoc(
         docRef,
         {
-          [exercise.name.toLowerCase().trim()]: {
-            weight: exercise.weight,
-            sets: exercise.sets,
-            reps: exercise.reps,
-          },
+          [exerciseData.name.toLowerCase().trim()]: exerciseData,
         },
         { merge: true }
       );
-      checkMovement(exercise, date);
+      if (!isCardio(exerciseData)) {
+        checkMovement(exerciseData, date);
+      }
       resetExercise();
       fetchDetail();
     } catch (error) {
@@ -126,62 +211,80 @@ const NewExercise: React.FC<NewExerciseProps> = ({
   };
 
   return (
-    <div className="border">
-      <motion.button
-        onClick={() => setShowModal(true)}
-        drag
-        dragConstraints={dragConstraintsRef}
-        className="w-8 h-8 rounded-lg bg-green-300 hover:bg-green-500 flex justify-center items-center"
-      >
-        <FaPlus className="text-white text-xl" />
-      </motion.button>
+    <>
       <Modal showModal={showModal} closeModal={closeModal}>
         <div className="flex-1">
-          <div className="mb-2">
+          <div className="mb-2 flex gap-2">
+            <div
+              role="button"
+              tabIndex={0}
+              aria-label="toggle exercise type"
+              className={classes(
+                "h-full w-10 text-2xl grid p-2 place-content-center rounded-md bg-gray-200",
+                exerciseType === "training"
+                  ? " text-green-600"
+                  : " text-gray-700"
+              )}
+              onClick={handleToggleExerciseType}
+            >
+              <motion.span
+                className=""
+                initial={false}
+                animate={{ rotateY: exerciseType === "training" ? 0 : 180 }}
+                transition={{ duration: 0.2 }}
+              >
+                {exerciseType === "training" ? (
+                  <GiWeightLiftingUp />
+                ) : (
+                  <GiRun />
+                )}
+              </motion.span>
+            </div>
             <input
               type="text"
               placeholder="Name"
-              value={exercise.name}
+              value={exerciseData.name}
               onChange={(e) =>
-                setExercise({
-                  ...exercise,
+                setExerciseData({
+                  ...exerciseData,
                   name: e.target.value,
                 })
               }
               className="px-4 py-2 w-full rounded-md border border-gray-300"
             />
           </div>
-          <div className="flex">
-            <input
-              type="text"
-              placeholder="Weight"
-              value={exercise.weight}
-              onChange={(e) =>
-                setExercise({ ...exercise, weight: e.target.value })
+          {exerciseType === "training" ? (
+            <TrainingInput
+              exercise={exerciseData as TrainingType}
+              setExercise={
+                setExerciseData as React.Dispatch<
+                  React.SetStateAction<TrainingType>
+                >
               }
-              className="px-4 py-2 w-1/2 mr-2 rounded-md border border-gray-300"
             />
-            <input
-              type="text"
-              placeholder="Reps"
-              value={exercise.reps}
-              onChange={(e) =>
-                setExercise({ ...exercise, reps: e.target.value })
+          ) : (
+            <CardioInput
+              exercise={exerciseData as CardioType}
+              setExercise={
+                setExerciseData as React.Dispatch<
+                  React.SetStateAction<CardioType>
+                >
               }
-              className="px-4 py-2 w-1/2 mr-2 rounded-md border border-gray-300"
             />
-            <input
-              type="text"
-              placeholder="Sets"
-              value={exercise.sets}
-              onChange={(e) =>
-                setExercise({ ...exercise, sets: e.target.value })
-              }
-              className="px-4 py-2 w-1/2 rounded-md border border-gray-300"
-            />
-          </div>
-          <div>
-            <button onClick={closeModal}>cancel</button>
+          )}
+          <div className="mt-2 text-gray-700 flex justify-center gap-2">
+            <button
+              className="uppercase w-1/5 p-2 bg-gray-200 border-white border rounded-md"
+              onClick={closeModal}
+            >
+              cancel
+            </button>
+            <button
+              onClick={update}
+              className="uppercase w-1/5 p-2 bg-white border  rounded-md"
+            >
+              save
+            </button>
           </div>
         </div>
 
@@ -191,7 +294,19 @@ const NewExercise: React.FC<NewExerciseProps> = ({
           </div>
         )}
       </Modal>
-    </div>
+      <motion.button
+        onClick={handleModalOpen}
+        drag
+        dragConstraints={dragConstraintsRef}
+        dragElastic={0}
+        onDragStart={whileDrag}
+        onDragEnd={endDrag}
+        initial={{ x: innerWidth / 2, translateX: "-50%" }}
+        className="py-2 px-8 rounded-lg bg-green-300 hover:bg-green-500 flex justify-center items-center"
+      >
+        <FaPlus className="text-white text-[36px]" />
+      </motion.button>
+    </>
   );
 };
 

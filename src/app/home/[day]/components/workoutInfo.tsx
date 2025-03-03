@@ -7,12 +7,28 @@ type WorkoutInfoProps = {
   deleteExercise: (exercise: string) => void;
 };
 
-const isCardio = (info: TrainingType | CardioType): info is CardioType => {
+export const isCardio = (
+  info: TrainingType | CardioType
+): info is CardioType => {
   return (info as CardioType).duration !== undefined;
 };
 
 const CardioInfo: React.FC<{ info: CardioType }> = ({ info }) => (
-  <p className="text-gray-700">Duration: {info.duration} min</p>
+  <div className="flex-1">
+    <div className="flex justify-between items-center">
+      <h1 className="text-lg font-bold mb-2 capitalize">{info.name}</h1>
+      <p className="text-gray-500">
+        <span>Est. kcal: </span>
+        {((Number(info.heartRate) - 70) / 100) * 8 * Number(info.duration)}
+      </p>
+    </div>
+    <div className="grid grid-cols-3 place-content-center">
+      <p className="text-gray-700">Duration: {info.duration} min</p>
+      <p className="text-gray-700 place-self-center text-nowrap">
+        Heart Rate: {info.heartRate} bpm
+      </p>
+    </div>
+  </div>
 );
 
 const TrainingInfo: React.FC<{ info: TrainingType }> = ({ info }) => (

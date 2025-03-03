@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import PrevExercise from "./prevExercise";
 import Tags from "./tags";
 
-const tags = ["l", "b", "s", "c", "switch"];
+const tags = ["l", "b", "s", "c", "cardio"];
 
 const DateControl = ({ params }: { params: { day: string } }) => {
   const [isExercise, setIsExercise] = useState(false);
@@ -77,7 +77,7 @@ const DateControl = ({ params }: { params: { day: string } }) => {
 
   return (
     <>
-      <div className="text-center flex items-center justify-center gap-2 pb-10">
+      <div className=" flex items-center justify-center gap-2 pb-10 mt-2">
         <h1 className="text-2xl font-bold">{params.day}</h1>
         <Tags
           tags={tags}
