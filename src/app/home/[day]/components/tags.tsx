@@ -38,7 +38,7 @@ type TagContextMenuProps = {
   y: number;
   open: boolean;
   close: () => void;
-  fc: () => void;
+  reset: () => void;
 };
 
 const TagContextMenu: React.FC<TagContextMenuProps> = ({
@@ -46,7 +46,7 @@ const TagContextMenu: React.FC<TagContextMenuProps> = ({
   y,
   open,
   close,
-  fc,
+  reset,
 }) => {
   if (!open) return null;
   return (
@@ -56,7 +56,7 @@ const TagContextMenu: React.FC<TagContextMenuProps> = ({
         close();
       }}
       onClick={(e) => e.stopPropagation()}
-      className="fixed w-[120px] h-max flex flex-col items-center bg-black text-white py-2 rounded-md shadow-lg"
+      className="fixed w-[120px] z-[1100] h-max flex flex-col items-center bg-black text-white py-2 rounded-md shadow-lg"
       style={{
         top: `max(0px, min(${y}px, calc(100vh - 80px)))`,
         left: `max(0px, min(${x}px, calc(100vw - 120px)))`,
@@ -68,7 +68,7 @@ const TagContextMenu: React.FC<TagContextMenuProps> = ({
         initial={{ background: "black", color: "white" }}
         transition={{ duration: 0.2 }}
         onClick={() => {
-          fc();
+          reset();
           close();
         }}
       >
@@ -155,18 +155,20 @@ const Tags: React.FC<TagsProps> = ({
                       aria-label="tag for body part or exercise group"
                       tabIndex={0}
                       onClick={() => handleSaveTag(tag.toUpperCase())}
-                      whileHover={{ border: "solid", scale: 1.1 }}
+                      whileFocus={{ scale: 1.1, borderWidth: "1px" }}
+                      whileHover={{ scale: 1.1, borderWidth: "1px" }}
                       whileTap={{ scale: 0.9 }}
                       key={tag}
                       transition={{ duration: 0.2 }}
-                      initial={{ top: 0, left: 0, border: "dashed" }}
+                      initial={{ top: 0, left: 0 }}
                       animate={{
                         top: `${y}px`,
                         left: `${x - 4}px`,
                         opacity: 1,
+                        borderWidth: "0px 0px 1px",
                       }}
                       exit={{ top: "0px", left: "0px", opacity: 0 }}
-                      className="absolute w-8 aspect-square grid place-content-center rounded-full capitalize"
+                      className="absolute w-8 aspect-square grid place-content-center capitalize"
                       style={{
                         borderColor:
                           tag.toUpperCase() === selectedTag
@@ -200,7 +202,7 @@ const Tags: React.FC<TagsProps> = ({
       {contextMenu.open && (
         <TagContextMenu
           {...contextMenu}
-          fc={() => handleSaveTag("")}
+          reset={() => handleSaveTag("")}
           close={() => setContextMenu({ x: 0, y: 0, open: false })}
         />
       )}

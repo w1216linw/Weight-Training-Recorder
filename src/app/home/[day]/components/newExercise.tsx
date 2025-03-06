@@ -274,14 +274,14 @@ const NewExercise: React.FC<NewExerciseProps> = ({
           )}
           <div className="mt-2 text-gray-700 flex justify-center gap-2">
             <button
-              className="uppercase w-1/5 p-2 bg-gray-200 border-white border rounded-md"
+              className="uppercase w-2/5 p-2 bg-gray-200 border-white border rounded-md"
               onClick={closeModal}
             >
               cancel
             </button>
             <button
               onClick={update}
-              className="uppercase w-1/5 p-2 bg-white border  rounded-md"
+              className="uppercase w-2/5 p-2 bg-white border  rounded-md"
             >
               save
             </button>
