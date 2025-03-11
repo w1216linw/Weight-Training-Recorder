@@ -45,7 +45,7 @@ const Login = () => {
           name="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="px-4 py-1 rounded-md text-primary"
+          className="px-4 py-1 rounded-md text-primary "
         />
       </div>
       <div className="flex flex-col">
@@ -61,7 +61,7 @@ const Login = () => {
       </div>
       <button
         onClick={handleLogin}
-        className=" bg-accent px-4 py-1 rounded-md hover:opacity-50 transition-colors text-accent-content text-lg"
+        className="bg-neutral rounded-md px-4 py-1 hover:opacity-50 transition-colors text-accent-content text-lg "
       >
         Login
       </button>

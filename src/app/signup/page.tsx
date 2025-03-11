@@ -15,7 +15,7 @@ const SignUpPage = () => {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  const handleSignUp = async (e: any) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       validate_inputs(email, password);
@@ -46,7 +46,10 @@ const SignUpPage = () => {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center p-24 ">
       {error.length > 1 && <div>{error}</div>}
-      <form className="flex flex-col bg-gray-300 px-10 py-5 rounded-lg gap-3">
+      <form
+        onSubmit={handleSignUp}
+        className="flex flex-col bg-gray-300 px-10 py-5 rounded-lg gap-3"
+      >
         <div className="flex flex-col">
           <label htmlFor="email">Email:</label>
           <input
@@ -90,7 +93,7 @@ const SignUpPage = () => {
           </div>
         </div>
         <button
-          onClick={handleSignUp}
+          type="submit"
           className=" bg-white px-4 py-1 rounded-md hover:bg-gray-50 transition-colors mt-4"
         >
           Register
