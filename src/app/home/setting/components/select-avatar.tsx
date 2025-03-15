@@ -64,10 +64,10 @@ const Avatar = ({ user }: { user: FirebaseUser }) => {
                 height={48}
                 className={classes(
                   elem.value === selectAvatar
-                    ? "outline-dashed outline-green-300"
+                    ? "outline-dashed outline-neutral outline-2"
                     : elem.value === newAvatar
-                    ? "outline-dashed outline-orange-300"
-                    : "outline-none",
+                    ? "outline-dashed outline-accent outline-2"
+                    : "outline-hidden",
                   "rounded-full outline-2 outline-offset-4"
                 )}
               />

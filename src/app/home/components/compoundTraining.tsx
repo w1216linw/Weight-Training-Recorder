@@ -67,7 +67,7 @@ const CompoundTraining = ({ user }: { user: FirebaseUser }) => {
   }, [active, fetchProcess]);
 
   return (
-    <div className="mb-2 p-2 bg-neutral-100 rounded-md w-full">
+    <div className="mb-2 p-2 bg-neutral-content rounded-md w-full">
       <CompoundTrainingTabs setActive={setActive} active={active} />
       {loading ? (
         <LoadingChart />

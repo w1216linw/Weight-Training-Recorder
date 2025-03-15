@@ -1,6 +1,17 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: dim --default;
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
 
 input,
 textarea,
@@ -31,7 +42,7 @@ body {
 .ray {
   position: absolute;
   width: 2px;
-  background-color: #fdba74;
+  background-color: var(--color-secondary);
   translate: 0 5px;
   border-radius: 2px;
 }

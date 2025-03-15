@@ -22,7 +22,7 @@ const CustomTooltip = ({ payload, label, active }: any) => {
   if (active && payload && payload.length) {
     const { date, reps, sets, volume, weight } = payload[0].payload;
     return (
-      <div className="bg-neutral-300 p-2 rounded-md">
+      <div className="bg-base-100 text-base-content p-2 rounded-md">
         <p className="intro">{date}</p>
         <p className="desc">{volume}</p>
         <p className="desc">
@@ -89,7 +89,7 @@ const Chart = ({ data, tab }: { data: Data[]; tab: string }) => {
           <Line
             type="monotone"
             dataKey="volume"
-            stroke="#8884d8"
+            stroke="gray"
             activeDot={{ r: 8 }}
           />
         </LineChart>

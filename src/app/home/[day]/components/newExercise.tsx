@@ -66,21 +66,21 @@ const TrainingInput: React.FC<{
       placeholder="Weight"
       value={exercise.weight}
       onChange={(e) => setExercise({ ...exercise, weight: e.target.value })}
-      className="px-4 py-2 w-1/2 mr-2 rounded-md border border-gray-300"
+      className="px-4 py-2 w-1/2 mr-2 rounded-md border border-neutral text-neutral focus:outline-none"
     />
     <input
       type="text"
       placeholder="Reps"
       value={exercise.reps}
       onChange={(e) => setExercise({ ...exercise, reps: e.target.value })}
-      className="px-4 py-2 w-1/2 mr-2 rounded-md border border-gray-300"
+      className="px-4 py-2 w-1/2 mr-2 rounded-md border border-neutral text-neutral focus:outline-none"
     />
     <input
       type="text"
       placeholder="Sets"
       value={exercise.sets}
       onChange={(e) => setExercise({ ...exercise, sets: e.target.value })}
-      className="px-4 py-2 w-1/2 rounded-md border border-gray-300"
+      className="px-4 py-2 w-1/2 rounded-md border border-neutral text-neutral shadow-sm focus:outline-none"
     />
   </div>
 );
@@ -220,10 +220,10 @@ const NewExercise: React.FC<NewExerciseProps> = ({
               tabIndex={0}
               aria-label="toggle exercise type"
               className={classes(
-                "h-full w-10 text-2xl grid p-2 place-content-center rounded-md bg-gray-200",
+                "h-full w-10 text-2xl grid p-2 place-content-center rounded-md ",
                 exerciseType === "training"
-                  ? " text-green-600"
-                  : " text-gray-700"
+                  ? " text-primary bg-primary-content"
+                  : " text-accent bg-accent-content"
               )}
               onClick={handleToggleExerciseType}
             >
@@ -250,7 +250,7 @@ const NewExercise: React.FC<NewExerciseProps> = ({
                   name: e.target.value,
                 })
               }
-              className="px-4 py-2 w-full rounded-md border border-gray-300"
+              className="px-4 py-2 w-full rounded-md border border-neutral text-neutral focus:outline-none"
             />
           </div>
           {exerciseType === "training" ? (
@@ -272,16 +272,16 @@ const NewExercise: React.FC<NewExerciseProps> = ({
               }
             />
           )}
-          <div className="mt-2 text-gray-700 flex justify-center gap-2">
+          <div className="mt-2 flex justify-center gap-2">
             <button
-              className="uppercase w-2/5 p-2 bg-gray-200 border-white border rounded-md"
+              className="uppercase w-2/5 p-2 bg-warning text-warning-content border rounded-md"
               onClick={closeModal}
             >
               cancel
             </button>
             <button
               onClick={update}
-              className="uppercase w-2/5 p-2 bg-white border  rounded-md"
+              className="uppercase w-2/5 p-2 bg-success text-success-content border rounded-md"
             >
               save
             </button>
@@ -289,7 +289,7 @@ const NewExercise: React.FC<NewExerciseProps> = ({
         </div>
 
         {error !== "" && (
-          <div className="flex py-2 bg-red-200 justify-center rounded-md my-1">
+          <div className="flex py-2 bg-error text-error-content justify-center rounded-md my-1">
             {error}
           </div>
         )}
@@ -302,9 +302,9 @@ const NewExercise: React.FC<NewExerciseProps> = ({
         onDragStart={whileDrag}
         onDragEnd={endDrag}
         initial={{ x: innerWidth / 2, translateX: "-50%" }}
-        className="py-2 px-8 rounded-lg bg-green-300 hover:bg-green-500 flex justify-center items-center"
+        className="py-2 px-8 rounded-lg bg-success shadow-sm hover:bg-success/80 flex justify-center items-center"
       >
-        <FaPlus className="text-white text-[36px]" />
+        <FaPlus className="text-success-content text-[36px]" />
       </motion.button>
     </>
   );

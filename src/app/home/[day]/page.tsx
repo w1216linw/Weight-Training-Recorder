@@ -67,10 +67,12 @@ const DayPage = ({ params }: { params: { day: string } }) => {
   }, []);
 
   return (
-    <motion.div className="p-2 h-full" ref={constraintsRef}>
+    <motion.div
+      className="p-2 h-full bg-neutral-content text-neutral"
+      ref={constraintsRef}
+    >
       <BackBtn />
       <DateControl params={params} />
-
       <div>
         {exercise.length > 0 &&
           exercise.map((elem) => WorkoutInfo({ info: elem, deleteExercise }))}

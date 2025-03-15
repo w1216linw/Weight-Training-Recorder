@@ -11,19 +11,19 @@ type ExerciseSet = (TrainingType | CardioType)[];
 
 const PrevCardioExercise = ({ item }: { item: CardioType }) => {
   return (
-    <div className="aspect-video bg-white rounded-md min-w-28 p-2 flex flex-col justify-between">
+    <div className="aspect-video bg-neutral-content text-neutral rounded-md min-w-28 w-max p-2 flex flex-col justify-between">
       <div>
         <p className="capitalize text-wrap">{item.name}</p>
         <p className="text-xs text-gray-500">
-          Est. kcal:
+          Est. C:
           <span className="ml-1">
             {((Number(item.heartRate) - 70) / 100) * 8 * Number(item.duration)}
           </span>
         </p>
       </div>
-      <div className="text-xs flex justify-between">
-        <p>{item.duration}mins</p>
-        <span>/</span>
+      <div className="text-xs flex gap-1">
+        <p>{item.duration}ms</p>
+        <span>|</span>
         <p>{item.heartRate}bpm</p>
       </div>
     </div>
@@ -32,7 +32,7 @@ const PrevCardioExercise = ({ item }: { item: CardioType }) => {
 
 const PrevTrainingExercise = ({ item }: { item: TrainingType }) => {
   return (
-    <div className="aspect-video bg-white rounded-md min-w-28 p-2 flex flex-col justify-between">
+    <div className="aspect-video bg-neutral-content text-neutral rounded-md min-w-28 p-2 flex flex-col justify-between">
       <p className="capitalize text-wrap">{item.name}</p>
       <div className="flex justify-between items-end">
         <p>
@@ -77,7 +77,7 @@ const PrevExercise = ({
   return (
     <>
       {prevExercise && prevExercise.length > 0 && (
-        <div className="w-full border overflow-hidden p-2 shadow-sm rounded-md">
+        <div className="w-full border border-neutral overflow-hidden p-2 shadow-xs rounded-md bg-neutral text-neutral-content">
           <p className="pb-1">Previous Exercise</p>
           <div className="flex gap-2 overflow-x-scroll">
             {prevExercise.map((item, index) =>

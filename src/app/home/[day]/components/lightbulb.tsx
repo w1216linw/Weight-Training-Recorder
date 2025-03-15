@@ -22,7 +22,9 @@ const LightBulb = ({ lighted }: { lighted: boolean }) => {
   return (
     <motion.div
       className="relative"
-      animate={{ color: lighted ? "#fdba74" : "#000" }}
+      animate={{
+        color: lighted ? "var(--color-secondary)" : "var(--color-base-100)",
+      }}
     >
       <MdLightbulbOutline className="size-5" />
       <div className="rotate-180 -translate-y-[1rem]">

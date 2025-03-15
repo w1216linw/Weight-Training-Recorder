@@ -13,7 +13,7 @@ const Week = () => {
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   return (
-    <div className="grid grid-cols-7 place-items-center gap-y-8 p-4">
+    <div className="grid grid-cols-7 place-items-center gap-y-8 p-4 text-neutral">
       {days.map((day, index) => (
         <div
           className="p-2 text-sm rounded-full grid place-content-center"
@@ -24,23 +24,6 @@ const Week = () => {
       ))}
     </div>
   );
-};
-
-const getBgColor = (
-  todayAndExercise: boolean,
-  notTodayAndExercise: boolean,
-  today: boolean
-) => {
-  // today and exercise
-  if (todayAndExercise) {
-    return "bg-blue-300";
-  } else if (notTodayAndExercise) {
-    return "bg-green-300";
-  } else if (today) {
-    return "bg-orange-300";
-  } else {
-    return "";
-  }
 };
 
 const Calendar = ({ user }: { user: FirebaseUser }) => {
@@ -86,7 +69,7 @@ const Calendar = ({ user }: { user: FirebaseUser }) => {
   }, [searchParam]);
 
   return (
-    <div className="flex flex-col mx-auto p-2 bg-neutral-100 rounded-md ">
+    <div className="flex flex-col mx-auto p-2 bg-neutral-content rounded-md">
       <MonthNavigation />
       <Week />
       <Days month={month} />
