@@ -32,15 +32,15 @@ const HomePage = () => {
       </div>
     );
   return (
-    <div className=" p-2 space-y-3 bg-[#35524A]">
+    <div className=" p-2 space-y-3 bg-neutral">
       <Header user={user} />
       {/* <Link href={"/home/plan"} className="text-lg">
         Add plan
       </Link> */}
-      <div className="bg-neutral-100 p-2 rounded-md flex">
+      <div className="bg-neutral-content p-2 rounded-md flex">
         <Link
           href="home/setting"
-          className="bg-[#35524A] rounded-md p-2 text-neutral-100"
+          className="bg-neutral rounded-md p-2 text-neutral-content "
         >
           <IoIosSettings fontSize={36} />
         </Link>

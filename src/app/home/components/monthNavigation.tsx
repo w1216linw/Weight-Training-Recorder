@@ -13,7 +13,7 @@ const MonthNavigation = () => {
   const month = getSearchParamsMonth(searchParam);
   const [direction, setDirection] = useState<"left" | "right">("left");
   return (
-    <div className="relative flex justify-between items-center">
+    <div className="relative flex justify-between items-center text-neutral">
       <MotionLink
         whileTap={{ scale: 0.9 }}
         whileHover={{ scale: 1.1 }}

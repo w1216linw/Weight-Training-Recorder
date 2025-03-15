@@ -36,7 +36,7 @@ const CompoundTrainingTabs = ({
     return () => window.removeEventListener("resize", debounceUpdateWidth);
   }, []);
   return (
-    <div className={`flex relative my-1`} ref={tabsRef}>
+    <div className="text-neutral flex relative my-1" ref={tabsRef}>
       {compoundMovement.map((elem, index) => (
         <motion.button
           key={elem}
@@ -54,7 +54,7 @@ const CompoundTrainingTabs = ({
       ))}
       <motion.div
         className="
-            shadow-inner shadow-gray-400 rounded-md absolute left-0 top-0 h-full"
+            shadow-inner shadow-primary-content rounded-md absolute left-0 top-0 h-full"
         style={{
           width: width,
         }}

@@ -11,11 +11,11 @@ const getBgColor = (
 ) => {
   // today and exercise
   if (todayAndExercise) {
-    return "bg-blue-300";
+    return "bg-secondary text-secondary-content";
   } else if (notTodayAndExercise) {
-    return "bg-green-300";
+    return "bg-primary text-primary-content";
   } else if (today) {
-    return "bg-orange-300";
+    return "bg-accent text-accent-content";
   } else {
     return "";
   }
@@ -32,7 +32,7 @@ const Days = ({ month }: { month: number }) => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
-        className="grid grid-cols-7 place-items-center gap-y-8 p-4"
+        className="grid grid-cols-7 place-items-center gap-y-8 p-4 text-neutral"
       >
         {dates.map(({ date, currentMonth, today }, index) => (
           <Link
@@ -47,7 +47,7 @@ const Days = ({ month }: { month: number }) => {
                 today
               ),
 
-              !currentMonth && "text-gray-400",
+              !currentMonth && "text-neutral opacity-30",
               "grid place-items-center size-9 rounded-full relative "
             )}
           >

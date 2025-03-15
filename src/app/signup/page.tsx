@@ -4,6 +4,7 @@ import { auth, db } from "@/lib/firebase";
 import { getDate, handleError, setSession, validate_inputs } from "@/lib/utils";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, doc, setDoc } from "firebase/firestore";
+import { motion } from "motion/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -44,11 +45,11 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-24 ">
+    <div className="grid place-items-center h-screen">
       {error.length > 1 && <div>{error}</div>}
       <form
         onSubmit={handleSignUp}
-        className="flex flex-col bg-gray-300 px-10 py-5 rounded-lg gap-3"
+        className="flex flex-col px-4 w-3/4 py-2 rounded-lg gap-3 bg-primary"
       >
         <div className="flex flex-col">
           <label htmlFor="email">Email:</label>
@@ -58,7 +59,7 @@ const SignUpPage = () => {
             name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="px-4 py-1 rounded-md"
+            className="px-4 py-1 rounded-md bg-neutral text-primary"
           />
         </div>
         <div className="flex flex-col">
@@ -69,10 +70,10 @@ const SignUpPage = () => {
             name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="px-4 py-1 rounded-md"
+            className="px-4 py-1 rounded-md bg-neutral text-primary"
           />
         </div>
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           <label htmlFor="avatar">Avatar:</label>
           <div className="flex gap-5 justify-evenly">
             {avatars.map((elem) => (
@@ -85,19 +86,27 @@ const SignUpPage = () => {
                 onClick={() => setAvatar(elem.value)}
                 className={`${
                   avatar === elem.value
-                    ? "outline-2 outline-offset-4 outline-dashed outline-white"
-                    : "outline-none"
-                } rounded-full`}
+                    ? "outline-2 outline-offset-4 outline-dashed outline-neutral"
+                    : "outline-hidden"
+                } rounded-full cursor-pointer`}
               />
             ))}
           </div>
         </div>
-        <button
+        <motion.button
+          whileHover={{ opacity: 0.9 }}
           type="submit"
-          className=" bg-white px-4 py-1 rounded-md hover:bg-gray-50 transition-colors mt-4"
+          className="cursor-pointer bg-accent py-1 rounded-md text-accent-content hover:opacity-50 transition-colors text-lg"
         >
           Register
-        </button>
+        </motion.button>
+        <motion.button
+          whileHover={{ opacity: 0.5 }}
+          onClick={() => router.back()}
+          className="text-primary-content text-left cursor-pointer w-min"
+        >
+          Cancel
+        </motion.button>
       </form>
     </div>
   );

@@ -35,8 +35,10 @@ const Login = () => {
   }, []);
 
   return (
-    <form className="flex flex-col gap-5 ">
-      {error.length > 1 && <div>{error}</div>}
+    <form className="flex flex-col gap-5">
+      {error.length > 1 && (
+        <div className="bg-secondary text-secondary-content">{error}</div>
+      )}
       <div className="flex flex-col">
         <label htmlFor="email">Email:</label>
         <input
@@ -45,7 +47,7 @@ const Login = () => {
           name="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="px-4 py-1 rounded-md text-primary "
+          className="px-4 py-1 rounded-md text-primary bg-neutral"
         />
       </div>
       <div className="flex flex-col">
@@ -56,12 +58,12 @@ const Login = () => {
           name="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="px-4 py-1 rounded-md text-primary"
+          className="px-4 py-1 rounded-md text-primary bg-neutral"
         />
       </div>
       <button
         onClick={handleLogin}
-        className="bg-neutral rounded-md px-4 py-1 hover:opacity-50 transition-colors text-accent-content text-lg "
+        className="bg-accent rounded-md py-1 hover:opacity-50 transition-colors text-accent-content text-lg "
       >
         Login
       </button>

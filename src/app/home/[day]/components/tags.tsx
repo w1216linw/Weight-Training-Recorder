@@ -56,7 +56,7 @@ const TagContextMenu: React.FC<TagContextMenuProps> = ({
         close();
       }}
       onClick={(e) => e.stopPropagation()}
-      className="fixed w-[120px] z-[1100] h-max flex flex-col items-center bg-black text-white py-2 rounded-md shadow-lg"
+      className="fixed w-[120px] z-1100 h-max flex flex-col items-center bg-black text-white py-2 rounded-md shadow-lg"
       style={{
         top: `max(0px, min(${y}px, calc(100vh - 80px)))`,
         left: `max(0px, min(${x}px, calc(100vw - 120px)))`,
@@ -172,12 +172,12 @@ const Tags: React.FC<TagsProps> = ({
                       style={{
                         borderColor:
                           tag.toUpperCase() === selectedTag
-                            ? "#fdba74"
-                            : "#000",
+                            ? "var(--color-secondary)"
+                            : "var(--color-secondary-content)",
                         color:
                           tag.toUpperCase() === selectedTag
-                            ? "#fdba74"
-                            : "#000",
+                            ? "var(--color-secondary)"
+                            : "var(--color-secondary-content)",
                       }}
                     >
                       {tag === "cardio" ? <FaRunning size={16} /> : tag}
@@ -191,9 +191,11 @@ const Tags: React.FC<TagsProps> = ({
             role="button"
             aria-label="toggle exercise sign"
             tabIndex={0}
-            whileHover={{ scale: 1.1 }}
+            whileHover={{
+              scale: 1.1,
+            }}
             whileTap={{ scale: 0.9 }}
-            className="bg-gray-200 rounded-md shadow-md text-2xl px-6 py-2"
+            className="border-2 border-secondary-content text-secondary  rounded-md shadow-secondary-content text-2xl px-6 py-2"
           >
             <BsLightningCharge />
           </motion.button>
