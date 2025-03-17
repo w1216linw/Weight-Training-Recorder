@@ -78,7 +78,9 @@ const DateControl = ({ params }: { params: { day: string } }) => {
   return (
     <>
       <div className=" flex items-center justify-center gap-2 pb-10 mt-2">
-        <h1 className="text-2xl font-bold">{params.day}</h1>
+        <h1 className="text-2xl font-bold text-neutral-content">
+          {params.day}
+        </h1>
         <Tags
           tags={tags}
           user={user}

@@ -301,8 +301,7 @@ const NewExercise: React.FC<NewExerciseProps> = ({
         dragElastic={0}
         onDragStart={whileDrag}
         onDragEnd={endDrag}
-        initial={{ x: innerWidth / 2, translateX: "-50%" }}
-        className="py-2 px-8 rounded-lg bg-success shadow-sm hover:bg-success/80 flex justify-center items-center"
+        className="py-2 px-8 rounded-lg bg-success shadow-sm hover:bg-success/80 flex justify-center items-center mx-auto"
       >
         <FaPlus className="text-success-content text-[36px]" />
       </motion.button>
