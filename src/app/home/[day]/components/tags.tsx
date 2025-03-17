@@ -130,7 +130,7 @@ const Tags: React.FC<TagsProps> = ({
             transition={{ duration: 0.2 }}
             onClick={handleShowTags}
           >
-            <div className="grid place-content-center">
+            <div className="grid place-content-center cursor-pointer">
               <div className="flex">
                 <LightBulb lighted={lighted} />
               </div>
@@ -195,7 +195,7 @@ const Tags: React.FC<TagsProps> = ({
               scale: 1.1,
             }}
             whileTap={{ scale: 0.9 }}
-            className="border-2 border-secondary-content text-secondary  rounded-md shadow-secondary-content text-2xl px-6 py-2"
+            className="btn btn-secondary btn-soft"
           >
             <BsLightningCharge />
           </motion.button>

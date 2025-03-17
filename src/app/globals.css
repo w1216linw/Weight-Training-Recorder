@@ -31,14 +31,6 @@ body {
   transition: height 0.3s ease;
 }
 
-.h-show {
-  height: 11rem;
-}
-
-.h-close {
-  height: 2rem;
-}
-
 .ray {
   position: absolute;
   width: 2px;

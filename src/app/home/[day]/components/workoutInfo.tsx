@@ -22,11 +22,9 @@ const CardioInfo: React.FC<{ info: CardioType }> = ({ info }) => (
         {((Number(info.heartRate) - 70) / 100) * 8 * Number(info.duration)}
       </p>
     </div>
-    <div className="grid grid-cols-3 place-content-center text-neutral-content">
+    <div className="flex text-neutral-content">
       <p>Duration: {info.duration} min</p>
-      <p className=" place-self-center text-nowrap">
-        Heart Rate: {info.heartRate} bpm
-      </p>
+      <p className="mx-auto">Heart Rate: {info.heartRate} bpm</p>
     </div>
   </div>
 );
@@ -59,7 +57,7 @@ const WorkoutInfo: React.FC<WorkoutInfoProps> = ({ info, deleteExercise }) => {
         <TrainingInfo info={info} />
       )}
       <button
-        className="w-10 flex items-center justify-end"
+        className="w-10 flex items-center justify-end cursor-pointer"
         onClick={() => deleteExercise(info.name)}
       >
         <FiDelete size={18} className="text-warning" />

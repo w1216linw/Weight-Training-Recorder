@@ -1,5 +1,6 @@
 "use client";
 import { auth } from "@/lib/firebase";
+import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { FaLessThan } from "react-icons/fa6";
@@ -11,18 +12,18 @@ const SettingPage = () => {
 
   return (
     <div className="p-4 space-y-3 bg-neutral h-screen">
-      <button
+      <motion.button
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
         onClick={() => router.back()}
-        className="text-2xl text-neutral-content"
+        className="text-2xl text-accent cursor-pointer"
       >
         <FaLessThan />
-      </button>
+      </motion.button>
       <h1 className="text-xl accent-col text-center text-neutral-content">
         Setting
       </h1>
-      <div className=" p-2 rounded-md bg-neutral-content">
-        {user && <Avatar user={user} />}
-      </div>
+      {user && <Avatar user={user} />}
     </div>
   );
 };
