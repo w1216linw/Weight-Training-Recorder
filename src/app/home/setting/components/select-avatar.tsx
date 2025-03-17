@@ -3,6 +3,7 @@ import { db } from "@/lib/firebase";
 import { classes } from "@/lib/utils";
 import { User as FirebaseUser } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { motion } from "motion/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { IoCaretDownSharp, IoCaretUpSharp } from "react-icons/io5";
@@ -37,22 +38,23 @@ const Avatar = ({ user }: { user: FirebaseUser }) => {
   }, []);
 
   return (
-    <div
-      className={classes(
-        "container space-y-6 rounded-md",
-        showAvatar ? "h-show" : "h-close"
-      )}
-    >
-      <div className="flex justify-between py-1">
+    <div className={classes("container rounded-md bg-neutral-content")}>
+      <div
+        className="flex justify-between h-12 py-4 items-center cursor-pointer"
+        onClick={() => setShowAvatar(!showAvatar)}
+      >
         <h1>Avatar</h1>
-        <button onClick={() => setShowAvatar(!showAvatar)}>
-          {showAvatar ? <IoCaretUpSharp /> : <IoCaretDownSharp />}
-        </button>
+        <span>{showAvatar ? <IoCaretUpSharp /> : <IoCaretDownSharp />}</span>
       </div>
-      <div className="flex flex-col gap-6 ">
+      <div
+        className={classes(
+          "flex flex-col gap-8 overflow-hidden select-none",
+          showAvatar ? "h-[9rem] py-4" : "h-0 py-0"
+        )}
+      >
         <div className="flex gap-5 justify-evenly">
           {avatars.map((elem) => (
-            <button
+            <motion.button
               onClick={() => setNewAvatar(elem.value)}
               disabled={elem.value === selectAvatar}
               key={elem.value}
@@ -66,15 +68,15 @@ const Avatar = ({ user }: { user: FirebaseUser }) => {
                   elem.value === selectAvatar
                     ? "outline-dashed outline-neutral outline-2"
                     : elem.value === newAvatar
-                    ? "outline-dashed outline-accent outline-2"
+                    ? "outline-dashed outline-secondary outline-2"
                     : "outline-hidden",
-                  "rounded-full outline-2 outline-offset-4"
+                  "rounded-full outline-2 outline-offset-4 cursor-pointer"
                 )}
               />
-            </button>
+            </motion.button>
           ))}
         </div>
-        <button onClick={updateUserAvatar} className="w-full text-lg">
+        <button onClick={updateUserAvatar} className="btn">
           Save
         </button>
       </div>

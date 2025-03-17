@@ -6,7 +6,7 @@ const BackBtn = () => {
   return (
     <button
       onClick={() => router.back()}
-      className="text-2xl text-accent absolute top-6 left-2"
+      className="text-2xl text-accent absolute top-6 left-2 cursor-pointer"
     >
       <FaLessThan />
     </button>
