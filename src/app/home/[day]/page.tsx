@@ -67,10 +67,7 @@ const DayPage = ({ params }: { params: { day: string } }) => {
   }, []);
 
   return (
-    <motion.div
-      className="p-2 h-full bg-neutral-content text-neutral"
-      ref={constraintsRef}
-    >
+    <motion.div className="p-2 text-neutral relative" ref={constraintsRef}>
       <BackBtn />
       <DateControl params={params} />
       <div>
