@@ -18,12 +18,12 @@ const rayVariants = {
     },
   },
 };
-const LightBulb = ({ lighted }: { lighted: boolean }) => {
+const LightBulb = ({ lighted, off }: { lighted: boolean; off: string }) => {
   return (
     <motion.div
       className="relative"
       animate={{
-        color: lighted ? "var(--color-secondary)" : "var(--color-base-100)",
+        color: lighted ? "var(--color-secondary)" : off,
       }}
     >
       <MdLightbulbOutline className="size-5" />
