@@ -132,7 +132,10 @@ const Tags: React.FC<TagsProps> = ({
           >
             <div className="grid place-content-center cursor-pointer">
               <div className="flex">
-                <LightBulb lighted={lighted} />
+                <LightBulb
+                  lighted={lighted}
+                  off="var(--color-neutral-content)"
+                />
               </div>
             </div>
           </motion.button>
@@ -142,7 +145,7 @@ const Tags: React.FC<TagsProps> = ({
         <div className="h-64 grid place-items-center grid-rows-3">
           <motion.div onClick={handleShowTags} className="relative row-span-2">
             <button className="scale-[3]">
-              <LightBulb lighted={lighted} />
+              <LightBulb lighted={lighted} off="var(--color-neutral)" />
             </button>
             <AnimatePresence mode="wait">
               {showTags &&
