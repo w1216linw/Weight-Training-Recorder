@@ -1,5 +1,5 @@
 "use client";
-import { getDate, getSearchParamsMonth } from "@/lib/utils";
+import { getSearchParamsMonth } from "@/lib/utils";
 import dayjs from "dayjs";
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
@@ -8,9 +8,13 @@ import { useState } from "react";
 import { FaGreaterThan, FaLessThan } from "react-icons/fa6";
 
 const MotionLink = motion.create(Link);
+
 const MonthNavigation = () => {
   const searchParam = useSearchParams();
+
   const month = getSearchParamsMonth(searchParam);
+  const monthName = dayjs().month(month).format("MMMM");
+
   const [direction, setDirection] = useState<"left" | "right">("left");
   return (
     <div className="relative flex justify-between items-center text-neutral">
@@ -32,7 +36,7 @@ const MonthNavigation = () => {
           transition={{ duration: 0.2 }}
           className="font-bold text-xl"
         >
-          {!!month ? dayjs().month(month).format("MMMM") : getDate("MMMM")}
+          {monthName}
         </motion.h1>
       </AnimatePresence>
       <MotionLink
