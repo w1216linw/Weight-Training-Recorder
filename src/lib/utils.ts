@@ -108,5 +108,6 @@ export const getLatestRecord = (data: DocumentData) => {
 };
 
 export function getSearchParamsMonth(searchParam: ReadonlyURLSearchParams) {
-  return Number(searchParam.get("month")) || dayjs().month();
+  const month = searchParam.get("month");
+  return month !== null ? parseInt(month) : dayjs().month();
 }
