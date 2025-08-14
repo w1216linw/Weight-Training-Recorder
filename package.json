@@ -9,18 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@types/recharts": "^1.8.29",
-    "dayjs": "^1.11.10",
-    "firebase": "^10.11.0",
-    "jose": "^5.2.4",
-    "motion": "^11.14.1",
-    "next": "^14.2.3",
-    "react": "^18",
-    "react-dom": "^18",
+    "dayjs": "^1.11.13",
+    "firebase": "^12.1.0",
+    "jose": "^5.10.0",
+    "motion": "^11.18.2",
+    "next": "^14.2.31",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-firebase-hooks": "^5.1.1",
-    "react-icons": "^5.1.0",
-    "recharts": "^2.12.7",
-    "sharp": "^0.33.3"
+    "react-icons": "^5.5.0",
+    "recharts": "^2.15.4",
+    "sharp": "^0.33.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.12",

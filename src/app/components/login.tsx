@@ -5,6 +5,8 @@ import { handleError, setSession } from "@/lib/utils";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import FormInput from "./ui/FormInput";
+import Button from "./ui/Button";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -37,36 +39,35 @@ const Login = () => {
   return (
     <form className="flex flex-col gap-5">
       {error.length > 1 && (
-        <div className="bg-secondary text-secondary-content">{error}</div>
+        <div className="bg-secondary text-secondary-content p-2 rounded">{error}</div>
       )}
-      <div className="flex flex-col">
-        <label htmlFor="email">Email:</label>
-        <input
-          type="text"
-          id="email"
-          name="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="px-4 py-1 rounded-md text-primary bg-neutral"
-        />
-      </div>
-      <div className="flex flex-col">
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="px-4 py-1 rounded-md text-primary bg-neutral"
-        />
-      </div>
-      <button
+      <FormInput
+        id="email"
+        name="email"
+        type="text"
+        placeholder="Enter your email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        label="Email:"
+        required
+      />
+      <FormInput
+        id="password"
+        name="password"
+        type="password"
+        placeholder="Enter your password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        label="Password:"
+        required
+      />
+      <Button
         onClick={handleLogin}
-        className="bg-accent rounded-md py-1 hover:opacity-50 transition-colors text-accent-content text-lg "
+        variant="accent"
+        className="w-full"
       >
         Login
-      </button>
+      </Button>
     </form>
   );
 };

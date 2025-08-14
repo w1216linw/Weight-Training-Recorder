@@ -17,18 +17,19 @@ const MonthNavigation = () => {
 
   const [direction, setDirection] = useState<"left" | "right">("left");
   return (
-    <div className="relative flex justify-between items-center text-neutral">
+    <nav className="relative flex justify-between items-center text-neutral" aria-label="Month navigation">
       <MotionLink
         whileTap={{ scale: 0.9 }}
         whileHover={{ scale: 1.1 }}
         href={`/home?month=${month - 1}`}
         onClick={() => setDirection("left")}
+        aria-label="Previous month"
       >
         <FaLessThan />
       </MotionLink>
 
       <AnimatePresence mode="wait">
-        <motion.h1
+        <motion.h2
           key={month}
           initial={{ opacity: 0.3, x: direction === "left" ? 30 : -30 }}
           animate={{ opacity: 1, x: 0 }}
@@ -37,17 +38,18 @@ const MonthNavigation = () => {
           className="font-bold text-xl"
         >
           {monthName}
-        </motion.h1>
+        </motion.h2>
       </AnimatePresence>
       <MotionLink
         onClick={() => setDirection("right")}
         whileTap={{ scale: 0.9 }}
         whileHover={{ scale: 1.1 }}
         href={`/home?month=${month + 1}`}
+        aria-label="Next month"
       >
         <FaGreaterThan />
       </MotionLink>
-    </div>
+    </nav>
   );
 };
 

@@ -1,27 +1,12 @@
-import { db } from "@/lib/firebase";
 import { User as FirebaseUser } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useUserAvatar } from "@/lib/hooks";
 
 const Avatar = ({ user }: { user: FirebaseUser }) => {
-  const [avatar, setAvatar] = useState("");
-  const getAvatar = async () => {
-    if (user) {
-      const userRef = doc(db, user.uid, "data");
-      const docSnap = await getDoc(userRef);
+  const { avatar, loading } = useUserAvatar(user);
 
-      return docSnap.exists() ? docSnap.data()?.avatar : "anonymous";
-    } else {
-      return "anonymous";
-    }
-  };
+  if (loading) return <div className="w-16 h-16 bg-gray-200 rounded animate-pulse"></div>;
 
-  useEffect(() => {
-    getAvatar().then((res) => {
-      setAvatar(res);
-    });
-  }, []);
   return (
     <div>
       {avatar && (

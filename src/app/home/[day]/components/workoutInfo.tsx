@@ -47,7 +47,7 @@ const TrainingInfo: React.FC<{ info: TrainingType }> = ({ info }) => (
 
 const WorkoutInfo: React.FC<WorkoutInfoProps> = ({ info, deleteExercise }) => {
   return (
-    <div
+    <article
       key={info.name}
       className="my-4 p-4 bg-neutral text-neutral-content rounded-sm shadow-md flex justify-between"
     >
@@ -59,10 +59,11 @@ const WorkoutInfo: React.FC<WorkoutInfoProps> = ({ info, deleteExercise }) => {
       <button
         className="w-10 flex items-center justify-end cursor-pointer"
         onClick={() => deleteExercise(info.name)}
+        aria-label={`Delete ${info.name} exercise`}
       >
         <FiDelete size={18} className="text-warning" />
       </button>
-    </div>
+    </article>
   );
 };
 

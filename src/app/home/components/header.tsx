@@ -14,7 +14,7 @@ const Header = ({ user }: { user: FirebaseUser }) => {
     router.push("/");
   };
   return (
-    <div className="w-full flex items-center justify-between p-4 border-neutral-content border-b-2 mb-2 text-neutral-content">
+    <header className="w-full flex items-center justify-between p-4 border-neutral-content border-b-2 mb-2 text-neutral-content">
       <Avatar user={user} />
       <div className="text-right space-y-4 min-w-max">
         <p className="cursor-default">{getDate("dddd, MMM DD")}</p>
@@ -26,7 +26,7 @@ const Header = ({ user }: { user: FirebaseUser }) => {
           Sign Out
         </button>
       </div>
-    </div>
+    </header>
   );
 };
 

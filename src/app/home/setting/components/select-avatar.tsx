@@ -1,28 +1,21 @@
 import { avatars } from "@/lib/data";
-import { db } from "@/lib/firebase";
 import { classes } from "@/lib/utils";
 import { User as FirebaseUser } from "firebase/auth";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { setDoc } from "firebase/firestore";
 import { motion } from "motion/react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { IoCaretDownSharp, IoCaretUpSharp } from "react-icons/io5";
+import { useUserAvatar } from "@/lib/hooks";
+import { getUserDocRef } from "@/lib/firebase-utils";
 
 const Avatar = ({ user }: { user: FirebaseUser }) => {
   const [showAvatar, setShowAvatar] = useState(false);
-  const [selectAvatar, setSelectAvatar] = useState("");
   const [newAvatar, setNewAvatar] = useState("");
-
-  const fetchUserAvatar = async () => {
-    const avatarRef = doc(db, user.uid, "data");
-    const data = await getDoc(avatarRef);
-    if (data.exists() && data.get("avatar")) {
-      setSelectAvatar(data.get("avatar"));
-    } else return;
-  };
+  const { avatar: selectAvatar } = useUserAvatar(user);
 
   const updateUserAvatar = async () => {
-    const avatarRef = doc(db, user.uid, "data");
+    const avatarRef = getUserDocRef(user.uid);
     await setDoc(
       avatarRef,
       {
@@ -30,12 +23,8 @@ const Avatar = ({ user }: { user: FirebaseUser }) => {
       },
       { merge: true }
     );
-    fetchUserAvatar();
+    window.location.reload();
   };
-
-  useEffect(() => {
-    fetchUserAvatar();
-  }, []);
 
   return (
     <div className={classes("container rounded-md bg-neutral-content")}>

@@ -1,9 +1,7 @@
+import LoadingSpinner from "../../components/LoadingSpinner";
+
 const Loading = () => {
-  return (
-    <div className="w-screen h-screen grid place-items-center">
-      <span className="loading loading-ring loading-lg"></span>
-    </div>
-  );
+  return <LoadingSpinner />;
 };
 
 export default Loading;
